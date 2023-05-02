@@ -21,17 +21,17 @@ public class SpringSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/v1/**").permitAll() //SPECIFIES SPRINGBOOT TO ALLOW ACCESS TO THIS PATH WITHOUT REQUESTING AUTHENTICATION
-                        .requestMatchers("/registration/**").permitAll() //SPECIFIES SPRINGBOOT TO ALLOW ACCESS TO THIS PATH WITHOUT REQUESTING AUTHENTICATION
-                        .requestMatchers("/login/**").permitAll() //SPECIFIES SPRINGBOOT TO ALLOW ACCESS TO THIS PATH WITHOUT REQUESTING AUTHENTICATION
+                        .requestMatchers("/api/v1/**").permitAll() //SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH WITHOUT REQUESTING AUTHENTICATION
+                        .requestMatchers("/registration/**").permitAll() //SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH WITHOUT REQUESTING AUTHENTICATION
+                        .requestMatchers("/login/**").permitAll() //SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH WITHOUT REQUESTING AUTHENTICATION
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/user/")
+                        .loginProcessingUrl("/login") //SPECIFIES SPRING BOOT THE PATH FOR THE LOGIN GOR
+                        .defaultSuccessUrl("/?successLogin") //SPECIFIES SRRINGBOOT THE PATH TO REDIRECT USER FOR SUCESSFULL LOGIN
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll())

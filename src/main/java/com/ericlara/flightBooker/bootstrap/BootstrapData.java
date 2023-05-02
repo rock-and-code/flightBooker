@@ -39,11 +39,14 @@ public class BootstrapData implements CommandLineRunner {
         User user = new User("user", "user@email.com", passwordEncoder.encode("password"), List.of(new Role("USER")));
         //SAVES USER TO THE MEMORY DBA
         userRepository.save(user);
+        //DISPLAY CREDENTIALS IN THE CONSOLE SO USER CAN TEST THE APP, OTHERWISE THE CAN CREATE AN ACCOUNT
+        System.out.println("USE THE FOLLOWING CREDENTIALS TO LOG IN: email: user@email.com, password: password");
         //GENERATES RANDOM DUMMY DATA FOR ILLUSTRATION PURPOSES. DATA IS CREATED ON A MEMORY DBA
         int RANDOM_AIRPORTS_SAMPLE =  80;
         int RANDOM_FLIGHTS_SAMPLE = 3000000;
         Random random = new Random();
         List<Airport> airports = new ArrayList<>();
+        
 
         //Generate a list of Airports randomly from a list (CLASS AIRPORTDATA ON DOMAINS FOLDER)
         for(int i=0; i<RANDOM_AIRPORTS_SAMPLE; ++i) {

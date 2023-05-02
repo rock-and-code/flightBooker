@@ -22,7 +22,7 @@ public class LoginController {
     private UserService userService;
 
     @RequestMapping("/login")
-    public String loginForm() {
+    public String loginForm(Model model) {
         return "login";
     }
 
@@ -40,15 +40,15 @@ public class LoginController {
             Model model) {
         User existingUser = userService.findUserByEmail(userDto.getEmail());
 
-        if (existingUser != null)
+        if (existingUser != null) {
             result.rejectValue("email", null,
-                    "User already registered !!!");
-
+                    "User already registered");
+                    return "/registration";
+        }
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
             return "/registration";
         }
-
         userService.saveUser(userDto);
         return "redirect:/?success";
     }

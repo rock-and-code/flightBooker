@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.ericlara.flightBooker.Models.*;
 import com.ericlara.flightBooker.Services.*;
@@ -37,14 +39,21 @@ public class FlightController {
 
     // Retrieve all flights and display them
     @GetMapping(value = "flights")
-    public String getAllFlights(@RequestParam(name = "origin") String origin, 
-            @RequestParam(name = "destination") String destination, 
+    public String getAllFlights(@RequestParam(name = "origin") String origin,
+            @RequestParam(name = "destination") String destination,
             @RequestParam(name = "departureDate") String departureDate, Model model) {
+
         // To limit the date picker from today to its max date (12/31/2120) source:
         LocalDate today = LocalDate.parse(departureDate);
         model.addAttribute("airports", airportService.findAll());
-        model.addAttribute("flights", flightService.findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin, destination, today, 1));
+        model.addAttribute("flights", flightService
+                .findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin, destination, today, 1));
         return "flights";
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public RedirectView handleMissingParams(MissingServletRequestParameterException e) {
+        return new RedirectView("/");
     }
 
     // Handle flight search form submission
@@ -56,8 +65,8 @@ public class FlightController {
         LocalDate departureDate = flightDTO.getDepartureDate();
         int passengers = flightDTO.getNumOfPassengers();
 
-        // System.out.println("Origin: " + origin + " Destination: " + destination 
-        //     + " Departure Date: " + departureDate + " No Passengers: " + passengers);
+        // System.out.println("Origin: " + origin + " Destination: " + destination
+        // + " Departure Date: " + departureDate + " No Passengers: " + passengers);
 
         model.addAttribute("flightSearchQuery", flightDTO);
         model.addAttribute("flights",
