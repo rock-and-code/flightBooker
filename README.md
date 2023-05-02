@@ -27,9 +27,11 @@ Navigate to http://localhost:8080 in your web browser to view the app.
 The app provides the following features:
 
 Search for flights: Users can search for flights by entering their origin, destination, and travel dates.
-View flight details: Users can view flight details such as departure and arrival times, flight duration, and airline information.
-Book flights: Users can select a flight and book tickets for it, specifying the number of passengers and seat preferences.
-Manage bookings: Users can view and manage their bookings, including canceling bookings and changing seat preferences.
+View flight details: Users can view flight details such as departure times, flight number, and price.
+
+Features pending to be added:
+Book flights: Users can select a flight and book tickets for it, specifying the number of passengers.
+Manage bookings: Users can view and manage their bookings, including canceling bookings.
 
 # Built With
 Bootstrap - Frontend framework
