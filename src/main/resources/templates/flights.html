@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap cdn -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+        crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="../static/images/airplane.png">
+    <title>Flights</title>
+</head>
+
+<body>
+    <!-- Nav bar -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">FlightBooker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-lg">
+
+        <!-- BREADCRUMB NAV -->
+        <div class="my-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Search</a></li>
+                    <li class="breadcrumb-item"><a href="#" th:attr="href=@{/flights}">Flights</a></li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="container-md">
+            <h1 class="mt-4">Flights</h1>
+            <!-- CARDS WITH FLIGHT INFO -->
+            <!-- CONDITIONAL TO CHECK IF SEARCH QUERY RENDERED RESULTS IF SO DISPLAY MATCHING RESULTS -->
+            <div class="container" th:if="${flights.size()>0}">
+                <div class="container" th:each="flight : ${flights}">
+                    <div class="card my-3 shadow">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <div class="d-md-flex justify-content-between">
+                                        <h5 class="card-title" th:text="|From: ${flight.origin}|"></h5>
+                                        <h5 class="card-title" th:text="|To: ${flight.destination}|"></h5>
+                                    </div>
+                                    <div class="d-md-flex justify-content-between">
+                                        <p class="card-text"><small class="text-muted"
+                                                th:text="|Departure Date: |"></small><span class="text-dark-emphasis"
+                                                th:text="${flight.departureDate}"></span></p>
+                                        <p class="card-text "><small class="text-muted"
+                                                th:text="|Departure Time: |"></small><span class="text-dark-emphasis"
+                                                th:text="${flight.departureTime}"></span></p>
+                                        <p class="card-text"><small class="text-muted"
+                                                th:text="|Available Seats: |"></small><span class="text-dark-emphasis"
+                                                th:text="${flight.availableSeats}"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+    
+                                <div class="card-body">
+                                    <p class="card-text" th:text="|Flight: ${flight.flightNumber}|"></p>
+                                    <a class="btn btn-dark col-12" th:href="@{/flights/{id}(id=${flight.id})}">View
+                                        Deal</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ELSE: NOT MATCHES FOUND MESSAGES -->
+            <div class="container" th:unless="${flights.size()>0}">
+                <div class="card my-3 shadow bg-white">
+                    <div class="row border-danger">
+                        <div class="col-md-9">
+                            <div class="card-body">
+                                <div class="d-md-flex justify-content-between">
+                                    <!-- <h5 class="card-title" th:text="|No flights avilable from ${flightSearchQuery.origin} to ${flightSearchQuery.destination} on ${flightSearchQuery.departureDate}|"></h5> -->
+                                    <h5 class="card-title" th:text="|We're sorry. There are no flights available that match your request.|"></h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card-body">
+                                <a class="btn btn-dark text-white col-12" th:href="@{/}">Continue Search</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+        <!-- ORIGINAL IMPLEMENTATION WITH A TABLE VIEW -->
+        <!-- <div class="container">
+            table
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Flight Number</th>
+                        <th scope="col">Departure Date</th>
+                        <th scope="col">Departure Time</th>
+                        <th scope="col">Available Seats</th>
+                        ACTION BUTTON to display deal
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="flight : ${flights}">
+                        
+                        <td th:text="${flight.origin}">#1</th>
+                        <td th:text="${flight.destination}">Mark</td>
+                        <td th:text="${flight.flightNumber}">Mark</td>
+                        <td th:text="${flight.departureDate}">Otto</td>
+                        <td th:text="${flight.getFormattedDepartureTime()}">Otto</td>
+                        <td th:text="${flight.availableSeats}">Otto</td>
+                        <td>
+                            <form th:action="@{/flights/{id}(id=${flight.id})}" method="GET">
+                                <Button type="submit" class="btn btn-sm btn-outline-success">View Deal</Button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+
+    </div>
+
+</body>
+
+</html>
