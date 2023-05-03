@@ -40,4 +40,4 @@ H2 - In-memory Relational database
 
 
 # License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License
