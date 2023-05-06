@@ -11,7 +11,7 @@ To run the app, you will need to have the following installed:
 # Installation
 Clone the repository:
 
-git clone https://github.com/rock-and-code/flightbooker.git
+<code>git clone https://github.com/rock-and-code/flightbooker.git</code>
 
 Open the project in your favorite IDE.
 
