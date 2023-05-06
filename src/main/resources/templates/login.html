@@ -17,6 +17,27 @@
 </head>
 
 <body>
+
+     <!-- Nav bar -->
+     <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">FlightBooker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- END NAVBAR -->
+
     <div class="container">
         <div class="row mt-5">
             <div class="col-6 mx-auto">
@@ -47,10 +68,14 @@
                             type="password">
                     </div>
                     <div class="mb-3">
+                        <input  id="remember" class="form-check-input" name="remember-me" type="checkbox">
+                        <label class="form-check-label" for="remember">Remember Me</label>
+                    </div>
+                    <div class="mb-3">
                         <button class="btn btn-primary mb-3 col-12" type="submit">Login</button>
                     </div>
                     <div class="mb-3 text-center">
-                        <a class="link-primary" th:href="@{/registration}">Register</a>
+                        <a class="link-primary" th:href="@{/register}">Register</a>
                     </div>
                 </form>
             </div>
@@ -60,8 +85,6 @@
         var alertNode = document.querySelector('.alert')
         var alert = bootstrap.Alert.getInstance(alertNode)
         alert.close()
-
-
     </script>
 </body>
 

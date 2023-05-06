@@ -1,5 +1,6 @@
 package com.ericlara.flightBooker.Services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,13 +8,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ericlara.flightBooker.Models.Role;
-import com.ericlara.flightBooker.Models.User;
+import com.ericlara.flightBooker.Models.UserAlreadyExistsException;
 import com.ericlara.flightBooker.Models.UserDto;
+import com.ericlara.flightBooker.Models.UserEntity;
 import com.ericlara.flightBooker.Repositories.RoleRepository;
 import com.ericlara.flightBooker.Repositories.UserRepository;
 import com.ericlara.flightBooker.util.TbConstants;
 
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -26,19 +28,31 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void saveUser(UserDto userDto) {
+    public void register(UserDto userDto) throws UserAlreadyExistsException {
+
+        if(checkIfUserExists(userDto.getEmail())) {
+            throw new UserAlreadyExistsException("User already exists for this email");
+        }
+
         Role role = roleRepository.findByName(TbConstants.Roles.USER);
 
         if (role == null)
             role = roleRepository.save(new Role(TbConstants.Roles.USER));
 
-        User user = new User(userDto.getName(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()),
-                Arrays.asList(role));
+        UserEntity user = new UserEntity(userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()),
+                Arrays.asList(role), new ArrayList<>());
+       
         userRepository.save(user);
+
     }
 
     @Override
-    public User findUserByEmail(String email) {
+    public UserEntity findUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public boolean checkIfUserExists(String email) {
+        return userRepository.findByEmail(email) != null;
     }
 }

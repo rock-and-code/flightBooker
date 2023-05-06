@@ -30,25 +30,26 @@ public class FlightRestController {
 
     // Endpoint to update a flight by ID
     @PutMapping(value = "{flightId}")
-    public ResponseEntity updateFlightById(@PathVariable("flightId")Long id, @RequestBody Flight flight) {
+    public ResponseEntity<Flight> updateFlightById(@PathVariable("flightId")Long id, @RequestBody Flight flight) {
+
         try {
             // Try to update the flight
-            return new ResponseEntity(flightService.updateFlightById(id, flight), HttpStatus.OK);
+            return new ResponseEntity<>(flightService.updateFlightById(id, flight), HttpStatus.OK);
         } catch (FlightNotFoundException e) {
             // If the flight is not found, return a response with HTTP status code 302 (Found)
-            return new ResponseEntity(e.getMessage(), HttpStatus.FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     // Endpoint to partially update a flight by ID
     @PatchMapping(value = "{flightId}")
-    public ResponseEntity patchFlightById(@PathVariable("flightId")Long id, @RequestBody Flight flight) {
+    public ResponseEntity<Flight> patchFlightById(@PathVariable("flightId")Long id, @RequestBody Flight flight) {
         try {
             // Try to partially update the flight
-            return new ResponseEntity(flightService.patchFlightById(id, flight), HttpStatus.OK);
+            return new ResponseEntity<>(flightService.patchFlightById(id, flight), HttpStatus.OK);
         } catch (FlightNotFoundException e) {
             // If the flight is not found, return a response with HTTP status code 302 (Found)
-            return new ResponseEntity(e.getMessage(), HttpStatus.FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -74,27 +75,28 @@ public class FlightRestController {
 
     // Endpoint to get a flight by ID
     @RequestMapping(value = "{flightId}", method = RequestMethod.GET)
-    public ResponseEntity getFlightById(@PathVariable("flightId") Long id) {
+    public ResponseEntity<Flight> getFlightById(@PathVariable("flightId") Long id) {
         try {
             // Try to find the flight by ID
-            return new ResponseEntity(flightService.findFlightById(id), HttpStatus.OK);
+            return new ResponseEntity<>(flightService.findFlightById(id), HttpStatus.OK);
         } catch (FlightNotFoundException e) {
             // If the flight is not found, return a response with HTTP status code 302 (Found)
-            return new ResponseEntity(e.getMessage(), HttpStatus.FOUND);
+            return ResponseEntity.notFound().build();
+
         }
     }
 
     // Endpoint to delete a flight by ID
     @DeleteMapping(value = "{flightId}")
-    public ResponseEntity deleteflightById(@PathVariable("flightId") Long id) {
+    public ResponseEntity<Flight> deleteflightById(@PathVariable("flightId") Long id) {
         try {
             // Try to find and delete the flight by ID
             Flight flightDeleted = flightService.findFlightById(id);
             flightService.deleteFlight(flightDeleted);
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (FlightNotFoundException e) {
             // If the flight is not found, return a ResponseEntity with a CONFLICT status code and an error message
-            return new ResponseEntity(e.getMessage(), HttpStatus.CONFLICT);
+            return ResponseEntity.notFound().build();
         }
     }
 

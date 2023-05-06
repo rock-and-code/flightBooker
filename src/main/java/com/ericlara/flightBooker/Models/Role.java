@@ -1,8 +1,15 @@
 package com.ericlara.flightBooker.Models;
 
-import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 
 
 @Entity(name = "ROLES")
@@ -16,7 +23,7 @@ public class Role {
     private String name;
     @ManyToMany(mappedBy = "roles")
     @Column(name="USERS", nullable = false)
-    private List<User> users = new ArrayList<>();
+    private List<UserEntity> users = new ArrayList<>();
 
     public Role(){}
     public Role(String name) {
@@ -39,11 +46,11 @@ public class Role {
         this.name = name;
     }
 
-    public List<User> getUsers() {
+    public List<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(List<UserEntity> users) {
         this.users = users;
     }
     

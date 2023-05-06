@@ -1,14 +1,17 @@
 package com.ericlara.flightBooker.Models;
 
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 // Force entity and column names to be uppercase since H2 converts unquoted identifiers to uppercase.
@@ -20,123 +23,144 @@ import jakarta.persistence.Table;
 public class Flight {
 
     // Primary key for the flight table
-@Id
-@GeneratedValue(strategy = GenerationType.AUTO)
-@Column(name = "ID")
-private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "FLIGHT_ID")
+    private Long id;
 
-// The flight's origin
-@Column(name = "ORIGIN")
-private String origin;
+    // The flight's origin
+    @Column(name = "ORIGIN")
+    private String origin;
 
-// The flight's destination
-@Column(name = "DESTINATION")
-private String destination;
+    // The flight's destination
+    @Column(name = "DESTINATION")
+    private String destination;
 
-// The date of the flight's departure
-@Column(name = "DEPARTURE_DATE")
-private LocalDate departureDate;
+    // The date of the flight's departure
+    @Column(name = "DEPARTURE_DATE")
+    private LocalDate departureDate;
 
-// The time of the flight's departure
-@Column(name = "DEPARTURE_TIME")
-private LocalTime departureTime;
+    // The time of the flight's departure
+    @Column(name = "DEPARTURE_TIME")
+    private LocalTime departureTime;
 
-// The number of available seats on the flight
-@Column(name = "AVAILABLE_SEATS")
-private Integer availableSeats;
+    // The number of available seats on the flight
+    @Column(name = "AVAILABLE_SEATS")
+    private Integer availableSeats;
 
-// The flight number
-@Column(name = "FLIGHT_NUMBER")
-private String flightNumber;
+    // The flight number
+    @Column(name = "FLIGHT_NUMBER")
+    private String flightNumber;
 
-// The price of the flight
-@Column(name = "PRICE")
-private Double price;
+    // The price of the flight
+    @Column(name = "PRICE")
+    private Double price;
 
-// Getters and setters for the class fields
-public Long getId() {
-    return id;
-}
+    @OneToMany(mappedBy = "flight")
+    private Set<FlightBook> bookings = new HashSet<>();
 
-public void setId(Long id) {
-    this.id = id;
-}
-
-public String getOrigin() {
-    return origin;
-}
-
-public void setOrigin(String origin) {
-    this.origin = origin;
-}
-
-public String getDestination() {
-    return destination;
-}
-
-public void setDestination(String destination) {
-    this.destination = destination;
-}
-
-public LocalDate getDepartureDate() {
-    return departureDate;
-}
-
-public void setDepartureDate(LocalDate departureDate) {
-    this.departureDate = departureDate;
-}
-
-// Returns formatted departure time using a 12-hour clock pattern
-public String getFormattedDepartureTime() {
-    String pattern = "hh:mm a";
-    String time = departureTime.format(DateTimeFormatter.ofPattern(pattern));
-    return time;
-}
-
-public LocalTime getDepartureTime() {
-    return departureTime;
-}
-
-public void setDepartureTime(LocalTime departureTime) {
-    this.departureTime = departureTime;
-}
-
-public Integer getAvailableSeats() {
-    return availableSeats;
-}
-
-public void setAvailableSeats(int availableSeats) {
-    this.availableSeats = availableSeats;
-}
-
-public String getFlightNumber() {
-    return flightNumber;
-}
-
-public void setFlightNumber(String flightNumber) {
-    this.flightNumber = flightNumber;
-}
-
-public Double getPrice() {
-    return price;
-}
-
-public void setPrice(double price) {
-    this.price = price;
-}
-
-// Returns formatted price as a string
-public String getFormattedPrice() {
-    return String.format("$%,.2f", price);
-}
-
-// Returns the destination address by removing the last six characters of the string 
-    public String getDestinationAddress() {
-        //int index = this.destination.indexOf(",");
-        return this.destination.substring(0, destination.length()-6);
+    // Getters and setters for the class fields
+    public Long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public LocalDate getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(LocalDate departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    // Returns formatted departure time using a 12-hour clock pattern
+    public String getFormattedDepartureTime() {
+        String pattern = "hh:mm a";
+        String time = departureTime.format(DateTimeFormatter.ofPattern(pattern));
+        return time;
+    }
+
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public Integer getAvailableSeats() {
+        return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public String getFlightNumber() {
+        return flightNumber;
+    }
+
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    // Returns formatted price as a string
+    public String getFormattedPrice() {
+        return String.format("$%,.2f", price);
+    }
+
+    // Returns the destination address by removing the last six characters of the
+    // string
+    public String getDestinationAddress() {
+        // int index = this.destination.indexOf(",");
+        return this.destination.substring(0, destination.length() - 6);
+    }
+
     
-    
+
+    public void setAvailableSeats(Integer availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Set<FlightBook> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(Set<FlightBook> bookings) {
+        this.bookings = bookings;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -148,6 +172,7 @@ public String getFormattedPrice() {
         result = prime * result + availableSeats;
         return result;
     }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -181,13 +206,14 @@ public String getFormattedPrice() {
             return false;
         return true;
     }
+
     @Override
     public String toString() {
         return "Flight [id=" + id + ", from=" + origin + ", to=" + destination + ", departureDate=" + departureDate
                 + ", availableSeats=" + availableSeats + "]";
     }
-    
-    //Create a constructor following the builder approach for better readability
+
+    // Create a constructor following the builder approach for better readability
     public Flight origin(String origin) {
         this.origin = origin;
         return this;
@@ -212,17 +238,20 @@ public String getFormattedPrice() {
         this.availableSeats = availableSeats;
         return this;
     }
-    
+
     public Flight flightNumber(String flightNumber) {
         this.flightNumber = flightNumber;
         return this;
     }
+
     public Flight price(double price) {
         this.price = price;
         return this;
     }
 
+    public Flight bookings(Set<FlightBook> bookings) {
+        this.bookings = bookings;
+        return this;
+    }
 
-    
-    
 }

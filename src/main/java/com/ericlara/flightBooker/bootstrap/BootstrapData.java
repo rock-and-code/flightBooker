@@ -12,8 +12,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.ericlara.flightBooker.Models.*;
-import com.ericlara.flightBooker.Repositories.*;
+import com.ericlara.flightBooker.Models.Airport;
+import com.ericlara.flightBooker.Models.AirportData;
+import com.ericlara.flightBooker.Models.Flight;
+import com.ericlara.flightBooker.Models.Role;
+import com.ericlara.flightBooker.Models.UserEntity;
+import com.ericlara.flightBooker.Repositories.AirportRepository;
+import com.ericlara.flightBooker.Repositories.FlightRepository;
+import com.ericlara.flightBooker.Repositories.UserRepository;
 
 /**
  * Class to create airports, flights, and save them to display WEB APP flight's search functionality.
@@ -36,7 +42,7 @@ public class BootstrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //CREATES A USER FOR DEMOSTRATION PURPOSES ONLY, THE APP ALLOWS NEW USERS TO BE REGISTERED
-        User user = new User("user", "user@email.com", passwordEncoder.encode("password"), List.of(new Role("USER")));
+        UserEntity user = new UserEntity("userFirstName", "userLastName", "user@email.com", passwordEncoder.encode("password"), List.of(new Role("USER")), new ArrayList<>());
         //SAVES USER TO THE MEMORY DBA
         userRepository.save(user);
         //DISPLAY CREDENTIALS IN THE CONSOLE SO USER CAN TEST THE APP, OTHERWISE THE CAN CREATE AN ACCOUNT
