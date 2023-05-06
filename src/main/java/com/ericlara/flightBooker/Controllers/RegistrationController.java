@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,8 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ericlara.flightBooker.Models.UserAlreadyExistsException;
 import com.ericlara.flightBooker.Models.UserDto;
-import com.ericlara.flightBooker.Models.UserEntity;
-import com.ericlara.flightBooker.Services.UserService;
+import com.ericlara.flightBooker.Services.UserServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -27,7 +27,7 @@ public class RegistrationController {
 
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     protected AuthenticationManager authenticationManager;
@@ -57,25 +57,30 @@ public class RegistrationController {
             return "register";
         }
 
-        //LOgin the user After success user registration
-        UserEntity user = userService.findUserByEmail(userDto.getEmail());
-        authenticateUserAndSetSession(user, request);
-
+        //AUTO LOGIN USER AFTER REGISTRATION TO AVOID DEFALT SPRING BOOT BEHAVIOUR OF REQUIRING
+        //LOGIN AFTER REGISTRATION
+        authWithAuthManager(request, userDto.getEmail(), userDto.getPassword());
+       
         return "redirect:/?success";
     }
 
 
-    private void authenticateUserAndSetSession(UserEntity user, HttpServletRequest request) {
-        String username = user.getEmail();
-        String password = user.getPassword();
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-
-        // generate session if one doesn't exist
-        request.getSession();
-
-        token.setDetails(new WebAuthenticationDetails(request));
-        Authentication authenticatedUser = authenticationManager.authenticate(token);
-
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+   /**
+    * Authenticates user Based on code posted on: https://coderanch.com/t/627731/frameworks/Autologin-site-registering-spring-security
+    * @param request
+    * @param username
+    * @param password
+    */
+    public void authWithAuthManager(HttpServletRequest request, String username, String password) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
+        authToken.setDetails(new WebAuthenticationDetails(request));
+        
+        Authentication authentication = authenticationManager.authenticate(authToken);
+        
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        //this step is important, otherwise the new login is not in session which is required by Spring Security
+        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
     }
+
+    
 }
