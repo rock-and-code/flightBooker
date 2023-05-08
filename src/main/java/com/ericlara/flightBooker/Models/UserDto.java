@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+//POJO TO HANDLES USER REGISTRATION FORM DATA
+
 public class UserDto implements Serializable {
 
     @NotNull

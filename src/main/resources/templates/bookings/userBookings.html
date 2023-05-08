@@ -42,6 +42,9 @@
                                 class="rounded-circle">
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
+                            <li class="dropdown-item" th:text="${userEmail}"></li>
+                            <hr class="dropdown-divider">
+                            </li>
                             <li class="nav-item">
                                 <form th:action="@{/logout}" method="post">
                                     <button type="submit" class="dropdown-item">Log out</button>

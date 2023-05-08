@@ -1,6 +1,8 @@
 package com.ericlara.flightBooker.Models;
 
 import java.util.List;
+//HARDCODED AIRPORT DATA REPOSITORY
+//SOURCE: https://en.wikipedia.org/wiki/List_of_airports_in_the_United_States
 
 public class AirportData {
     private AirportData(){}

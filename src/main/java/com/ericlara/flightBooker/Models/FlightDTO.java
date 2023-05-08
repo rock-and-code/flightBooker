@@ -2,7 +2,9 @@ package com.ericlara.flightBooker.Models;
 
 import java.time.LocalDate;
 
-public class FlightDTO {
+//POJO TO HANDLE DATA FROM SEARCH FLIGHT FORM
+
+public class FlightDto {
 
     private String origin;
     private String destination;
@@ -35,19 +37,19 @@ public class FlightDTO {
         this.numOfPassengers = numOfPassengers;
     }
 
-    public FlightDTO origin(String origin) {
+    public FlightDto origin(String origin) {
         this.origin = origin;
         return this;
     }
-    public FlightDTO destination(String destination) {
+    public FlightDto destination(String destination) {
         this.destination = destination;
         return this;
     }
-    public FlightDTO departureDate(LocalDate departureDate) {
+    public FlightDto departureDate(LocalDate departureDate) {
         this.departureDate = departureDate;
         return this;
     }
-    public FlightDTO numOfPassengers(int numOfPassengers) {
+    public FlightDto numOfPassengers(int numOfPassengers) {
         this.numOfPassengers = numOfPassengers;
         return this;
     }

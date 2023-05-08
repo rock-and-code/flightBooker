@@ -1,5 +1,6 @@
 package com.ericlara.flightBooker.Models;
 
+//POJO TO HANDLE DATA FROM BOOKING CHECKOUT FORM
 public class BookingDto {
     private int passengers;
 

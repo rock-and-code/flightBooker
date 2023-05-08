@@ -32,13 +32,15 @@ public class RegistrationController {
     @Autowired
     protected AuthenticationManager authenticationManager;
 
-
+    //METHOD TO RENDER THE REGISTRATION FORM TO THE USER AFTER PRESING REGISTER BUTTON ON LOG IN FORM
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("userDto", new UserDto());
-        return "register";
+        return "authentication/register";
     }
 
+    //METHOD TO PROCESS THE REGISTRATION FORM INFO AND AUTO LOG IN USER IF DATA IS CORRECT AND USER
+    // IS NOT ALREADY REGISTERED BASED ON EMAL PROVIDED
     @PostMapping("/register")
     public String userRegistration(final @Valid UserDto userDto, BindingResult result, Model model,
     HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
@@ -46,15 +48,15 @@ public class RegistrationController {
             model.addAttribute("userDto", userDto);
             // redirectAttributes.addFlashAttribute("message", "Registration Failed");
             // redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
-            return "register";
+            return "authentication/register";
         }
         
         try {
-            userService.register(userDto);
+            userService.register(userDto); //SAVE USER IN THE DBA
         } catch (UserAlreadyExistsException e) {
             result.rejectValue("email", "userDto.email", "An account alrady exists with that email");
             model.addAttribute("userDto", userDto);
-            return "register";
+            return "authentication/register";
         }
 
         //AUTO LOGIN USER AFTER REGISTRATION TO AVOID DEFALT SPRING BOOT BEHAVIOUR OF REQUIRING
@@ -67,6 +69,8 @@ public class RegistrationController {
 
    /**
     * Authenticates user Based on code posted on: https://coderanch.com/t/627731/frameworks/Autologin-site-registering-spring-security
+    * This helper function is used to auto login user after success registration. To spring default behaviour
+    * of requiring user to log in after registration. 
     * @param request
     * @param username
     * @param password

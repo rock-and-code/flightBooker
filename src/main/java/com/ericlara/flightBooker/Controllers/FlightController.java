@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.ericlara.flightBooker.Models.FlightDTO;
+import com.ericlara.flightBooker.Models.FlightDto;
 import com.ericlara.flightBooker.Models.FlightNotFoundException;
 import com.ericlara.flightBooker.Models.UserEntity;
 import com.ericlara.flightBooker.Services.AirportService;
@@ -48,7 +48,7 @@ public class FlightController {
     // Render flight search form
     @GetMapping
     public String flightsForm(HttpServletResponse response,
-            @ModelAttribute FlightDTO flightDTO, HttpSession session, Model model) {
+            @ModelAttribute FlightDto flightDTO, HttpSession session, Model model) {
         // To limit the date picker from today to its max date (12/31/2120) source:
         // https://stackoverflow.com/questions/47763292/thymeleaf-html5-datepicker-setting-min-date-from-variable-not-working
         // INBJECT A COOKIE FOR DEMOSTRATIONS PURPOSES
@@ -59,10 +59,10 @@ public class FlightController {
 
         LocalDate today = LocalDate.now();
         model.addAttribute("today", today);
-        model.addAttribute("flightDTO", new FlightDTO());
+        model.addAttribute("flightDTO", new FlightDto());
         model.addAttribute("userEmail", getLoggInUserEmail());
         model.addAttribute("airports", airportService.findAllSortedASC());
-        return "flightSearchForm";
+        return "flights/flightSearchForm";
     }
 
     // Retrieve all flights and display them
@@ -78,7 +78,7 @@ public class FlightController {
         model.addAttribute("userEmail", getLoggInUserEmail());
         model.addAttribute("flights", flightService
                 .findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin, destination, today, 1));
-        return "flights";
+        return "flights/flights";
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
@@ -88,7 +88,7 @@ public class FlightController {
 
     // Handle flight search form submission
     @PostMapping(value = "flights")
-    public String flightsSubmit(@ModelAttribute FlightDTO flightDTO, Model model) {
+    public String flightsSubmit(@ModelAttribute FlightDto flightDTO, Model model) {
         // Make a query using flightSearchQuery data
         String origin = flightDTO.getOrigin();
         String destination = flightDTO.getDestination();
@@ -103,7 +103,7 @@ public class FlightController {
                 flightService.findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin,
                         destination, departureDate, passengers));
 
-        return "flights";
+        return "flights/flights";
     }
 
     // Retrieve flight details by ID and display them
@@ -123,9 +123,10 @@ public class FlightController {
             return new FlightNotFoundException().getMessage();
         }
 
-        return "flightDetails";
+        return "flights/flightDetails";
     }
 
+     //METHOD TO GET AUTHENTICATED USER EMAIL
     private String getLoggInUserEmail() {
         if (getLoggedInUserInfo() == null) { //User has not been authenticated yet
             return null;
@@ -134,6 +135,10 @@ public class FlightController {
         }
     }
 
+    //METHOD TO GET AUTHENTICATED USER INFO
+    //THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND 
+    //TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS,
+    //AND TO DISPLAY THE USERS'S BOOKINGS 
     private UserEntity getLoggedInUserInfo() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String userName = loggedInUser.getName();

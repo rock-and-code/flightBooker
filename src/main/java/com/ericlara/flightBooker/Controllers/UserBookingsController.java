@@ -33,26 +33,34 @@ public class UserBookingsController {
         this.flightBookService = flightBookService;
     }
 
+    //METHOD TO DISPLAY USER'S BOOKINGS
     @PostMapping
     public String getUserBookings(HttpServletResponse response, Model model) {
         UserEntity currentUser = getLoggedInUserInfo();
 
         model.addAttribute("userEmail", currentUser.getEmail());
         model.addAttribute("bookings", flightBookService.findAllByUser(currentUser));
-        return "userBookings";
+        return "bookings/userBookings";
     }
 
+    //METHOD TO CANCEL ONE USER'S BOOKING AT A TIME
     @PostMapping(value = "{flightBookingId}")
     public String deleteUserBooking(@PathVariable("flightBookingId")Long id, HttpServletResponse response, Model model) {
         Optional<FlightBook> flightBookToDelete = flightBookService.findById(id);
-        //DELETE FLIGHT BOOKING
+        //DELETE USER'S FLIGHT BOOKING
+        //TODO: PROVIDE A CONFIRMATION MECHANISM TO AVOID CANCELLING BOOKING BY ERROR
         flightBookService.delete(flightBookToDelete.get());
         UserEntity currentUser = getLoggedInUserInfo();
         model.addAttribute("userEmail", currentUser.getEmail());
         model.addAttribute("bookings", flightBookService.findAllByUser(currentUser));
-        return "userBookings";
+        return "bookings/userBookings";
     }
 
+
+    //METHOD TO GET AUTHENTICATED USER INFO
+    //THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND 
+    //TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS,
+    //AND TO DISPLAY THE USERS'S BOOKINGS 
     private UserEntity getLoggedInUserInfo() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String userName = loggedInUser.getName(); //Username = email

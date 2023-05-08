@@ -61,7 +61,7 @@ public class BookingsController {
         }
 
         model.addAttribute("bookingDTO", new BookingDto());
-        return "bookingCheckoutForm";
+        return "bookings/bookingCheckoutForm";
     }
 
     // Add flight to User after pressing book now button on flight details view
@@ -85,6 +85,10 @@ public class BookingsController {
         return "redirect:/?successBooking"; // FEEDBACK ALERT ON FLIGHT_SEARCH_FORM
     }
 
+
+    //METHOD TO GET AUTHENTICATED USER INFO
+    //THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND 
+    //TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS.
     private UserEntity getLoggedInUserInfo() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String userName = loggedInUser.getName();

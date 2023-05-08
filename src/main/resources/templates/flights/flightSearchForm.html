@@ -43,10 +43,11 @@
                                 class="rounded-circle">
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
+                            <li class="dropdown-item" th:text="${userEmail}"></li>
+                            <hr class="dropdown-divider">
                             <li><form th:action="@{/bookings/user}" method="post">
                                 <button type="submit" class="dropdown-item">Bookings</button>
                             </form></li>
-                            <hr class="dropdown-divider">
                             </li>
                             <li class="nav-item">
                                 <form th:action="@{/logout}" method="post">
@@ -55,10 +56,11 @@
                             </li>
                         </ul>
                     </div>
-                    <!-- DISPLAY LOG IN -->
+                    <!-- DISPLAY EITHER LOGIN OR LOGOUT BUTTON BASED ON WHETHER USER HAS BEEN AUTHENTICATED -->
                     <div class="flex-shrink-0 dropdown" th:if="${userEmail == null}">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
+                            <!-- IMAGE OF A PROFILE ICON -->
                             <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png" alt="mdo" width="32" height="32"
                                 class="rounded-circle">
                         </a>
@@ -71,50 +73,29 @@
                         </ul>
                     </div>
                 </div>
-                <!-- END IF -->
-
-                <!-- FIRST IMPLEMENTAITON WITH LOG IN AND LOG OUT BUTTONS -->
-                
-                <!-- CHECK IF USER HAS BEEN AUTHENTICATED TO DISPLAY LOGIN OR LOGOUT BUTTON -->
-                <!-- <div class="ml-auto" th:if="${userEmail != null}">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <form th:action="@{/logout}" method="post">
-                                <button type="submit" class="btn btn-outline-dark">Log out</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div> -->
-                <!-- <div class="ml-auto" th:if="${userEmail == null}">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <form th:action="@{/login}" method="get">
-                                <button type="submit" class="btn btn-outline-dark">Log In</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div> -->
-                <!-- END IF -->
             </div>
         </div>
     </nav>
+    <!-- END NAV BAR -->
 
     <div class="container">
         <div class="container">
             <div class="container gap-2 col-8" id="search-form">
-                <!-- ALERTS TO PROVIDE USER FEEDBACK ON AUTHENTICATION -->
+                <!-- ALERTS TO PROVIDE USER FEEDBACK ON SUCCESSFUL REGISTRATION -->
                 <div th:if="${param.success}">
                     <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                         Registration successful
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
+                 <!-- ALERTS TO PROVIDE USER FEEDBACK ON SUCCESSFUL LOG IN -->
                 <div th:if="${param.successLogin}">
                     <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
                         Welcome back
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
+                 <!-- ALERTS TO PROVIDE USER FEEDBACK ON SUCCESSFUL FLIGHT BOOK -->
                 <div th:if="${param.successBooking}">
                     <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
                         Flight Booked Successfully
@@ -137,8 +118,7 @@
                             </select>
                         </div> -->
 
-                        <!-- FROM/TO -->
-                        <!-- <div class="input-group mb-3"> -->
+                        <!-- FROM/TO INPUTS FIELDS-->
                         <div class="col-md-6">
                             <label for="leavingFrom" class="form-label">Leaving From</label>
                             <select class="form-select" th:field="*{origin}" aria-label="Default select example"
@@ -165,9 +145,8 @@
                                 Please select the airport of destination
                             </div>
                         </div>
-                        <!-- </div> -->
 
-                        <!-- FROM/TO -->
+                        <!-- DEPARTURE DATE DATE PICKER -->
                         <div class="col-12">
                             <label for="departureDate" class="form-label">Departure Date</label>
                             <input type="date" class="form-control" th:attr="min=${today}" id="departureDate"
@@ -177,7 +156,7 @@
                             </div>
                         </div>
 
-                        <!-- PASSENGER INFO -->
+                        <!-- NUMBER OF PASSENGER INPUT FIELD -->
                         <div class="col-12">
                             <label class="form-label" for="seats">Number Passengers</label>
                             <input type="number" id="seats" class="form-control" value="1" min="1" max="166"
@@ -200,11 +179,15 @@
     </div>
 
     <script>
-        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        //JAVASCRIPT SNIPPET TO PROVIDES DATA VALIDATION ON FRONT END WHEN FORM IS SUBMITTED
+        //IT WILL SUPPLY A MESSAGE BELOW THE BLANK INPUT FIELD
         (function () {
             'use strict'
 
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            // it checks every input field that its class attribute contains "needs-validation"
+
+            //TODO: MOVE JS TO SEPARTE FILE
             var forms = document.querySelectorAll('.needs-validation')
 
             // Loop over them and prevent submission
