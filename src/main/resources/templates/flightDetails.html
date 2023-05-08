@@ -91,7 +91,6 @@
             </nav>
         </div>
         <!-- FLIGHT DETAILS -->
-
         <div class="container-sm">
             <div id="header" class="text-center mb-3">
                 <h1 class="mt-4" th:text="|Flight ${flight.flightNumber}|">Search for flights</h1>
@@ -109,7 +108,8 @@
                 <div class="card-body">
                     <h5 class="card-title" th:text="|${flight.origin} - ${flight.destination}|">Card title</h5>
                     <p class="card-text font-weight-bold" th:text="|Book now for ${flight.getFormattedPrice()}|"></p>
-                    <form th:action="@{/bookings/flights/{id}(id=${flight.id})}" method="post">
+                    <!-- <form th:action="@{/bookings/flights/{id}(id=${flight.id})}" method="post"> -->
+                    <form th:action="@{/bookings/flights/{id}(id=${flight.id})}" method="get">
                         <button type="submit" class="btn btn-dark col-12">Book</button>
                     </form>
                 </div>
@@ -119,7 +119,6 @@
                 <a th:href="@{|/flights?origin=${flight.origin}&destination=${flight.destination}&departureDate=${flight.departureDate}&numOfPassengers=${1}|}"
                     class="btn btn-outline-secondary col-12">Back</a>
             </div>
-
         </div>
     </div>
 </body>

@@ -24,6 +24,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class UserBookingsController {
 
     // Inject FlightService and AirportService instances
+    @Autowired
     private final FlightBookService flightBookService;
     @Autowired
     private UserService userService;
@@ -35,6 +36,7 @@ public class UserBookingsController {
     @PostMapping
     public String getUserBookings(HttpServletResponse response, Model model) {
         UserEntity currentUser = getLoggedInUserInfo();
+
         model.addAttribute("userEmail", currentUser.getEmail());
         model.addAttribute("bookings", flightBookService.findAllByUser(currentUser));
         return "userBookings";
@@ -53,7 +55,7 @@ public class UserBookingsController {
 
     private UserEntity getLoggedInUserInfo() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        String userName = loggedInUser.getName();
+        String userName = loggedInUser.getName(); //Username = email
         return userService.findUserByEmail(userName);
     }
 }

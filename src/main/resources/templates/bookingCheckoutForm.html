@@ -39,13 +39,15 @@
                     <div class="flex-shrink-0 dropdown" th:if="${userEmail != null}">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png" alt="mdo" width="32" height="32"
-                                class="rounded-circle">
+                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
+                                alt="mdo" width="32" height="32" class="rounded-circle">
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
-                            <li><form th:action="@{/bookings/user}" method="post">
-                                <button type="submit" class="dropdown-item">Bookings</button>
-                            </form></li>
+                            <li>
+                                <form th:action="@{/bookings/user}" method="post">
+                                    <button type="submit" class="dropdown-item">Bookings</button>
+                                </form>
+                            </li>
                             <hr class="dropdown-divider">
                             </li>
                             <li class="nav-item">
@@ -59,8 +61,8 @@
                     <div class="flex-shrink-0 dropdown" th:if="${userEmail == null}">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png" alt="mdo" width="32" height="32"
-                                class="rounded-circle">
+                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
+                                alt="mdo" width="32" height="32" class="rounded-circle">
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
                             <li class="nav-item">
@@ -72,29 +74,6 @@
                     </div>
                 </div>
                 <!-- END IF -->
-
-                <!-- FIRST IMPLEMENTAITON WITH LOG IN AND LOG OUT BUTTONS -->
-                
-                <!-- CHECK IF USER HAS BEEN AUTHENTICATED TO DISPLAY LOGIN OR LOGOUT BUTTON -->
-                <!-- <div class="ml-auto" th:if="${userEmail != null}">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <form th:action="@{/logout}" method="post">
-                                <button type="submit" class="btn btn-outline-dark">Log out</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div> -->
-                <!-- <div class="ml-auto" th:if="${userEmail == null}">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <form th:action="@{/login}" method="get">
-                                <button type="submit" class="btn btn-outline-dark">Log In</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div> -->
-                <!-- END IF -->
             </div>
         </div>
     </nav>
@@ -102,32 +81,13 @@
     <div class="container">
         <div class="container">
             <div class="container gap-2 col-8" id="search-form">
-                <!-- ALERTS TO PROVIDE USER FEEDBACK ON AUTHENTICATION -->
-                <div th:if="${param.success}">
-                    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                        Registration successful
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-                <div th:if="${param.successLogin}">
-                    <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
-                        Welcome back
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-                <div th:if="${param.successBooking}">
-                    <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
-                        Flight Booked Successfully
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
                 <div id="header">
-                    <h1 class="mt-3">Search for flights</h1>
+                    <h1 class="mt-3">Check out</h1>
                 </div>
                 <div class="flight" id="flightbox">
                     <!-- FLIGHT FORM -->
-                    <form action="#" th:action="@{/flights}" th:object="${flightDTO}" method="post"
-                        class="row g-3 needs-validation" novalidate>
+                    <form action="#" th:action="@{/bookings/flights/{id}(id=${flight.id})}" th:object="${bookingDTO}"
+                        method="post" class="row g-3 needs-validation" novalidate>
                         <!-- TRIP TYPE -->
                         <!-- <div class="mb-3">
                             <select class="form-select" name="Flight-type" aria-label="Default select example">
@@ -136,65 +96,63 @@
                                 <option value="One Way">One Way</option>
                             </select>
                         </div> -->
-
-                        <!-- FROM/TO -->
-                        <!-- <div class="input-group mb-3"> -->
-                        <div class="col-md-6">
-                            <label for="leavingFrom" class="form-label">Leaving From</label>
-                            <select class="form-select" th:field="*{origin}" aria-label="Default select example"
-                                id="leavingFrom" required>
-                                <option value="" selected disable>Choose...</option>
-                                <option th:each="airport: ${airports}" th:text="${airport.getFormattedLocation()}"
-                                    th:value="${airport.getFormattedLocation()}">Two
-                                </option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please select the airport of origin
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="arrivingAt" class="form-label">Arriving At</label>
-                            <select class="form-select" th:field="*{destination}" id="arrivingAt"
-                                aria-label="Default select example" required>
-                                <option value="" selected disable>Choose...</option>
-                                <option th:each="airport: ${airports}" th:text="${airport.getFormattedLocation()}"
-                                    th:value="${airport.getFormattedLocation()}">Two
-                                </option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please select the airport of destination
-                            </div>
-                        </div>
-                        <!-- </div> -->
-
-                        <!-- FROM/TO -->
-                        <div class="col-12">
-                            <label for="departureDate" class="form-label">Departure Date</label>
-                            <input type="date" class="form-control" th:attr="min=${today}" id="departureDate"
-                                th:field="*{departureDate}" required>
-                            <div class="invalid-feedback">
-                                Please select the departure date.
-                            </div>
-                        </div>
-
                         <!-- PASSENGER INFO -->
                         <div class="col-12">
                             <label class="form-label" for="seats">Number Passengers</label>
                             <input type="number" id="seats" class="form-control" value="1" min="1" max="166"
-                                th:field="*{numOfPassengers}" />
+                                th:field="*{passengers}" />
                             <div class="invalid-feedback">
                                 Please select the number of passengers
                             </div>
                         </div>
 
-                        <!-- SEARCH BUTTON -->
+                        <!-- CARDS WITH BOOKING SUBTOTAL INFO -->
+                <div id="header">
+                    <h1 class="mb-3">Check out details</h1>
+                </div>
+                <div class="card my-3 shadow">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <div class="d-md-flex justify-content-between">
+                                    <h5 class="card-title" th:text="|From: ${flight.origin}|"></h5>
+                                    <h5 class="card-title" th:text="|To: ${flight.destination}|"></h5>
+                                </div>
+                                <div class="d-md-flex justify-content-between">
+                                    <p class="card-text"><small class="text-muted"
+                                        th:text="|Price per seat: |"></small><span class="text-dark-emphasis"
+                                        th:text="${flight.formattedPrice}"></span></p>
+                                </div>
+                                <div class="d-md-flex justify-content-between">
+                                    <h5 class="card-title" th:text="|Subtotal: |" id="subtotalLabel"></h5>
+                                    <h5 class="card-title" th:text="${flight.price}" id="subtotal"></h5>
+                                </div>
+                                <div class="d-md-flex justify-content-between">
+                                    <h5 class="card-title" th:text="|Tax (estimated): |" id="taxLabel"></h5>
+                                    <h5 class="card-title" th:text="${flight.price * 0.10}|" id="tax"></h5>
+                                </div>
+                                <div class="d-md-flex justify-content-between">
+                                    <h5 class="card-title" th:text="|Total: |" id="totalLabel">
+                                    </h5>
+                                    <h5 class="card-title" th:text="${flight.price * 1.10}" id="total">
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                        <!-- BOOKING FORM BUTTON -->
                         <div class="col-12">
                             <div class="d-grid mx-auto">
-                                <input type="submit" id="search-flight" value="Search flights" class="btn btn-dark" />
+                                <input type="submit" value="Confirm" class="btn btn-dark" />
                             </div>
                         </div>
                     </form>
                 </div>
+            </div>
+            <div class="container gap-2 col-8 my-3" id="bookingSubtotal">
+                
             </div>
         </div>
     </div>
@@ -220,6 +178,40 @@
                     }, false)
                 })
         })()
+    </script>
+    <script th:inline="javascript">
+
+        //SCRIPT TO UPDATES THE VALUES OF THE SUBTOTAL CARD
+        let flightPrice = /*[[${flight.price}]]*/ 199.99;
+        const passengersInput = document.querySelector('#seats');
+        const subtotalText = document.querySelector('#subtotal');
+        const taxText = document.querySelector('#tax');
+        const totalText = document.querySelector('#total');
+        const saleTax = 0.10 //FOR DEMOSTRATIONS PURPOSES ONLY
+
+        // Create our number formatter. FROM: https://stackoverflow.com/questions/149055/how-to-format-numbers-as-currency-strings
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+
+            // These options are needed to round to whole numbers if that's what you want.
+            //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+            //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+        });
+
+        //INITIALIZES THE SUBTOTAL CARDVIEW FIELDS
+        subtotalText.innerHTML = `${formatter.format(0)}`;
+        taxText.innerHTML = `${formatter.format(0)}`;
+        totalText.innerHTML = `${formatter.format(0)}`;
+
+        //LISTENER THAT UPDATES SUBTOTAL CARD FIELDS WHEN USER CHANGE THE NUMBER OF PASSAGERS
+        const uddateSubtotal = passengersInput.addEventListener('change', () => {
+            let passengers = passengersInput.value;
+            let subtotal = flightPrice * passengers;
+            subtotalText.innerHTML = `${formatter.format(subtotal)}`;
+            taxText.innerHTML = `${formatter.format(subtotal * saleTax)}`;
+            totalText.innerHTML = `${formatter.format(subtotal * (1 + saleTax))}`;
+        })
     </script>
 
 </body>
