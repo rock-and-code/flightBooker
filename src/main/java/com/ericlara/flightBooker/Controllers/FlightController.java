@@ -97,7 +97,7 @@ public class FlightController {
 
         // System.out.println("Origin: " + origin + " Destination: " + destination
         // + " Departure Date: " + departureDate + " No Passengers: " + passengers);
-
+        model.addAttribute("userEmail", getLoggInUserEmail());
         model.addAttribute("flightSearchQuery", flightDTO);
         model.addAttribute("flights",
                 flightService.findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin,
@@ -137,7 +137,7 @@ public class FlightController {
     private UserEntity getLoggedInUserInfo() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String userName = loggedInUser.getName();
-        System.out.println("USER: " + userName);
+        //System.out.println("USER: " + userName);
         return userService.findUserByEmail(userName);
     }
 }
