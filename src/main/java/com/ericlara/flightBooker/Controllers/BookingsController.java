@@ -56,7 +56,6 @@ public class BookingsController {
             Flight flight = flightService.findFlightById(id);
             model.addAttribute("flight", flight);
         } catch (FlightNotFoundException e) {
-            // TODO: REDIRECTS TO FLIGHT SEARCH FORM AND ADD FEEDBACK MESSAGE
             return "redirect:/?flightNotFound";
         }
 

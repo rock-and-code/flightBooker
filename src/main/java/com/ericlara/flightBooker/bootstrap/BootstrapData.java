@@ -107,18 +107,16 @@ public class BootstrapData implements CommandLineRunner {
             double price = random.nextDouble(80.00, 450.00);
 
             //Creating and saving flight in the DBA
-            Flight flight = new Flight()
+            Flight flight = new Flight.Builder()
                 .departureDate(departureDate)
                 .departureTime(departureTime)
                 .origin(airports.get(origin).getFormattedLocation())
                 .destination(airports.get(destination).getFormattedLocation())
                 .availableSeats(random.nextInt(20, airplaneSeats+1)) //TO ENSURE AT LEAST 20 AVAILABLES SEATS ON EVERY GENERATED FLIGHT
                 .flightNumber(flightNumber)
-                .price(price);
+                .price(price)
+                .build();
 
-                //System.out.println(flight.getDestinationAddress());
-            
-            flight.setFlightNumber(flightNumber);
             //SAVING FLIGHT IN THE DBA
             flightRepository.save(flight);
         }

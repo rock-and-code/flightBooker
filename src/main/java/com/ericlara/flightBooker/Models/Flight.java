@@ -58,6 +58,19 @@ public class Flight {
 
     @OneToMany(mappedBy = "flight")
     private Set<FlightBook> bookings = new HashSet<>();
+    
+    public Flight(){}
+
+    public Flight(Builder builder) {
+        this.origin = builder.origin;
+        this.destination = builder.destination;
+        this.departureDate = builder.departureDate;
+        this.departureTime = builder.departureTime;
+        this.availableSeats = builder.availableSeats;
+        this.flightNumber = builder.flightNumber;
+        this.price = builder.price;
+        this.bookings = builder.bookings;
+    }
 
     // Getters and setters for the class fields
     public Long getId() {
@@ -143,8 +156,6 @@ public class Flight {
         return this.destination.substring(0, destination.length() - 6);
     }
 
-    
-
     public void setAvailableSeats(Integer availableSeats) {
         this.availableSeats = availableSeats;
     }
@@ -214,44 +225,69 @@ public class Flight {
     }
 
     // Create a constructor following the builder approach for better readability
-    public Flight origin(String origin) {
-        this.origin = origin;
-        return this;
+    public static class Builder {
+
+        private String origin;
+        private String destination;
+        private LocalDate departureDate;
+        private LocalTime departureTime;
+        private Integer availableSeats;
+        private String flightNumber;
+        private Double price;
+        private Set<FlightBook> bookings = new HashSet<>();
+
+        // public static Builder newInstance() {
+        //     return new Builder();
+        // }
+
+        // private Builder() {}
+
+        public Builder(){}
+
+        public Builder origin(String origin) {
+            this.origin = origin;
+            return this;
+        }
+
+        public Builder destination(String destination) {
+            this.destination = destination;
+            return this;
+        }
+
+        public Builder departureDate(LocalDate departureDate) {
+            this.departureDate = departureDate;
+            return this;
+        }
+
+        public Builder departureTime(LocalTime departureTime) {
+            this.departureTime = departureTime;
+            return this;
+        }
+
+        public Builder availableSeats(int availableSeats) {
+            this.availableSeats = availableSeats;
+            return this;
+        }
+
+        public Builder flightNumber(String flightNumber) {
+            this.flightNumber = flightNumber;
+            return this;
+        }
+
+        public Builder price(double price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder bookings(Set<FlightBook> bookings) {
+            this.bookings = bookings;
+            return this;
+        }
+
+        public Flight build() {
+            return new Flight(this);
+        }
     }
 
-    public Flight destination(String destination) {
-        this.destination = destination;
-        return this;
-    }
-
-    public Flight departureDate(LocalDate departureDate) {
-        this.departureDate = departureDate;
-        return this;
-    }
-
-    public Flight departureTime(LocalTime departureTime) {
-        this.departureTime = departureTime;
-        return this;
-    }
-
-    public Flight availableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
-        return this;
-    }
-
-    public Flight flightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
-        return this;
-    }
-
-    public Flight price(double price) {
-        this.price = price;
-        return this;
-    }
-
-    public Flight bookings(Set<FlightBook> bookings) {
-        this.bookings = bookings;
-        return this;
-    }
 
 }

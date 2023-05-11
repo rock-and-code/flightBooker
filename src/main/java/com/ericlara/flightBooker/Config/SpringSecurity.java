@@ -40,19 +40,20 @@ public class SpringSecurity {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH
                         .requestMatchers("/flights/**").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS
-                                                                    // PATH
+                        // PATH
                         .requestMatchers("/h2-console/").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS
-                                                                     // PATH
+                        // PATH
                         .requestMatchers("/api/v1/**").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH
-                                                                   // WITHOUT REQUESTING AUTHENTICATION
+                        // WITHOUT REQUESTING AUTHENTICATION
                         .requestMatchers("/register/**").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS
-                                                                     // PATH WITHOUT REQUESTING AUTHENTICATION
+                        // PATH WITHOUT REQUESTING AUTHENTICATION
                         .requestMatchers("/login/**").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH
-                                                                  // WITHOUT REQUESTING AUTHENTICATION
-                        .anyRequest().authenticated())
+                        // WITHOUT REQUESTING AUTHENTICATION
+                        .anyRequest().authenticated()
+                        )
                 .authenticationProvider(authenticationProvider())
-                .csrf().ignoringRequestMatchers(toH2Console()).and() // TO ALLOW US ACCESS TO THE H2 DATABASE CONSOLE
-                .headers().frameOptions().disable().and() // TO ALLOW US ACCESS TO THE H2 DATABASE CONSOLE
+                .csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console())) // TO ALLOW US ACCESS TO THE H2 DATABASE CONSOLE
+                .headers(headers -> headers.frameOptions().disable()) // TO ALLOW US ACCESS TO THE H2 DATABASE CONSOLE
                 .formLogin((form) -> form
                         //.defaultSuccessUrl("/?successLogin", true) // SPECIFIES SRRINGBOOT THE PATH TO REDIRECT USER FOR
                         .successHandler(successHandler())                                         // SUCESSFULL LOGIN
@@ -60,7 +61,7 @@ public class SpringSecurity {
                         .failureUrl("/login?error")
                         .loginProcessingUrl("/login")
                         .permitAll())
-                .rememberMe().userDetailsService(userDetailsService).and()
+                .rememberMe(me -> me.userDetailsService(userDetailsService))
                 // .rememberMe().tokenRepository(persistentTokenRepository()).and() //To create
                 // a cookie to remember user
                 // .sessionManagement(session -> session

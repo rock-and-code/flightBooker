@@ -48,7 +48,6 @@ public class UserBookingsController {
     public String deleteUserBooking(@PathVariable("flightBookingId")Long id, HttpServletResponse response, Model model) {
         Optional<FlightBook> flightBookToDelete = flightBookService.findById(id);
         //DELETE USER'S FLIGHT BOOKING
-        //TODO: PROVIDE A CONFIRMATION MECHANISM TO AVOID CANCELLING BOOKING BY ERROR
         flightBookService.delete(flightBookToDelete.get());
         UserEntity currentUser = getLoggedInUserInfo();
         model.addAttribute("userEmail", currentUser.getEmail());

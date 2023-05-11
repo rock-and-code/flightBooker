@@ -67,6 +67,13 @@ public class FlightServiceImpl implements FlightService {
         flightRepository.delete(flight);
     }
 
+    // Deletes a flight from the repository
+    @Override
+    public void deleteFlightById(Long id) {
+        flightRepository.deleteById(id);
+    }
+    
+
     // Updates a flight by ID
     @Override
     public Flight updateFlightById(Long id, Flight flight) throws FlightNotFoundException {
@@ -83,6 +90,7 @@ public class FlightServiceImpl implements FlightService {
             existing.setDepartureDate(flight.getDepartureDate());
             existing.setDepartureTime(flight.getDepartureTime());
             Flight updated = flightRepository.save(existing);
+            //No needed to return updated object... just facilitate debugging
             return updated;
         }
     }

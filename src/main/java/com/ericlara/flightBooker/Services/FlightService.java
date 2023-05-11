@@ -29,6 +29,8 @@ public interface FlightService {
     // Deletes the given flight
     public void deleteFlight(Flight flight);
 
+    public void deleteFlightById(Long id);
+
     // Updates the flight with the given ID using the data in the given flight object, or throws a FlightNotFoundException if the flight does not exist
     public Flight updateFlightById(Long id, Flight flight) throws FlightNotFoundException;
 
