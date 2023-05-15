@@ -63,6 +63,7 @@ public class UserEntity {
         this.roles = roles;
         this.flightbookings = flightbookings;
     }
+
     public Long getId() {
         return id;
     }

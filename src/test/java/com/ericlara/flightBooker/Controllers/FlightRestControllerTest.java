@@ -106,7 +106,7 @@ public class FlightRestControllerTest {
   void testDeleteflightById() throws Exception {
     Flight flight = flights.get(0);
     flight.setId(Long.valueOf(1));
-    mockMvc.perform(delete("/api/v1/flights/" + flight.getId())
+    mockMvc.perform(delete(FlightRestController.FLIGHT_PATH_ID, flight.getId())
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent());
     //longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
@@ -123,7 +123,7 @@ public class FlightRestControllerTest {
     BDDMockito.given(flightService.findFlightById(any(Long.class))).willReturn(flight);
     Mockito.when(flightService.findFlightById(flightId)).thenReturn(flight);
 
-    mockMvc.perform(get("/api/v1/flights/" + flightId)
+    mockMvc.perform(get(FlightRestController.FLIGHT_PATH_ID, flightId)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -138,7 +138,7 @@ public class FlightRestControllerTest {
     BDDMockito.given(flightService.findAllFlights()).willReturn(flights);
     Mockito.when(flightService.findAllFlights()).thenReturn(flights);
 
-    mockMvc.perform(get("/api/v1/flights")
+    mockMvc.perform(get(FlightRestController.FLIGHT_PATH)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -150,7 +150,7 @@ public class FlightRestControllerTest {
     Flight flight = flights.get(1);
     flight.setId(Long.valueOf(1));
 
-    mockMvc.perform(patch("/api/v1/flights/" + flight.getId())
+    mockMvc.perform(patch(FlightRestController.FLIGHT_PATH_ID, flight.getId())
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(flight))
@@ -168,7 +168,7 @@ public class FlightRestControllerTest {
     BDDMockito.given(flightService.saveFlight(any(Flight.class))).willReturn(flights.get(1));
     //.willAnswer(invocation->invocation.getArguments());
     // System.out.println(objectMapper.writeValueAsString(flight));
-    mockMvc.perform(post("/api/v1/flights")
+    mockMvc.perform(post(FlightRestController.FLIGHT_PATH)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .characterEncoding("utf-8") //TO ADD JSON TO THE RESPONSE BOY
@@ -184,7 +184,7 @@ public class FlightRestControllerTest {
     Flight flight = flights.get(0);
     flight.setId(Long.valueOf(1));
 
-    mockMvc.perform(put("/api/v1/flights/" + flight.getId())
+    mockMvc.perform(put(FlightRestController.FLIGHT_PATH_ID, flight.getId())
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(flight))

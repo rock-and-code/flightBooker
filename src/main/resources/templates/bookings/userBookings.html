@@ -16,6 +16,7 @@
     <link rel="icon" type="image/x-icon" href="../static/images/airplane.png">
     <title>Flights</title>
 </head>
+
 <body>
     <!-- Nav bar -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -38,8 +39,8 @@
                     <div class="flex-shrink-0 dropdown" th:if="${userEmail != null}">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png" alt="mdo" width="32" height="32"
-                                class="rounded-circle">
+                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
+                                alt="mdo" width="32" height="32" class="rounded-circle">
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
                             <li class="dropdown-item" th:text="${userEmail}"></li>
@@ -56,8 +57,8 @@
                     <div class="flex-shrink-0 dropdown" th:if="${userEmail == null}">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png" alt="mdo" width="32" height="32"
-                                class="rounded-circle">
+                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
+                                alt="mdo" width="32" height="32" class="rounded-circle">
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
                             <li class="nav-item">
@@ -67,9 +68,9 @@
                             </li>
                         </ul>
                     </div>
-                <!-- END IF -->
+                    <!-- END IF -->
+                </div>
             </div>
-        </div>
     </nav>
     <div class="container-lg">
         <div class="container-md">
@@ -91,16 +92,19 @@
                                         <p class="card-text"><small class="text-muted"
                                                 th:text="|Flight Number: |"></small><span class="text-dark-emphasis"
                                                 th:text="${booking.flight.flightNumber}"></span></p>
+                                        <p class="card-text"><small class="text-muted"
+                                                th:text="|Departure Time: |"></small><span class="text-dark-emphasis"
+                                                th:text="${booking.flight.formattedDepartureTime}"></span></p>
                                         <p class="card-text "><small class="text-muted"
                                                 th:text="|Departure date: |"></small><span class="text-dark-emphasis"
                                                 th:text="${booking.flight.departureDate}"></span></p>
                                     </div>
                                     <div class="d-md-flex justify-content-between">
-                                        <p class="card-text "><small class="text-muted"
-                                            th:text="|From: |"></small><span class="text-dark-emphasis"
-                                            th:text="${booking.flight.origin}"></span></p>
-                                        <p class="card-text "><small class="text-muted"
-                                                th:text="|To: |"></small><span class="text-dark-emphasis"
+                                        <p class="card-text "><small class="text-muted" th:text="|From: |"></small><span
+                                                class="text-dark-emphasis" th:text="${booking.flight.origin}"></span>
+                                        </p>
+                                        <p class="card-text "><small class="text-muted" th:text="|To: |"></small><span
+                                                class="text-dark-emphasis"
                                                 th:text="${booking.flight.destination}"></span></p>
                                     </div>
                                 </div>

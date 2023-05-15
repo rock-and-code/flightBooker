@@ -3,6 +3,8 @@ package com.ericlara.flightBooker.Controllers;
 import java.time.LocalDate;
 import java.util.UUID;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -49,8 +51,11 @@ public class BookingsController {
     @GetMapping
     public String checkoutForm(@PathVariable(name = "id", required = false) Long id,
             @ModelAttribute BookingDto bookingDTO, HttpServletResponse response,
-            HttpSession session, Model model) {
+            HttpSession session, Model model) throws AuthenticationException {
         UserEntity currentUser = getLoggedInUserInfo();
+        if (currentUser == null) {
+            throw new AuthenticationException();
+        }
         model.addAttribute("userEmail", currentUser.getEmail());
         try {
             Flight flight = flightService.findFlightById(id);
@@ -90,6 +95,9 @@ public class BookingsController {
     //TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS.
     private UserEntity getLoggedInUserInfo() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        if(loggedInUser == null) {
+            return null;
+        }
         String userName = loggedInUser.getName();
         return userService.findUserByEmail(userName);
     }

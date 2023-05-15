@@ -27,6 +27,18 @@ public class UserDto implements Serializable {
     @NotEmpty(message = "User's password cannot be empty")
     private String password;
 
+    public UserDto(){}
+
+    public UserDto(@NotNull @NotEmpty(message = "User's first name cannot be empty.") String firstName,
+            @NotNull @NotEmpty(message = "User's last name cannot be empty") String lastName,
+            @NotNull @NotEmpty(message = "User's email cannot be empty") @Email(message = "Please enter a valid email (example@email.com)") String email,
+            @NotNull @NotEmpty(message = "User's password cannot be empty") String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
+
     public String getFirstName() {
         return firstName;
     }

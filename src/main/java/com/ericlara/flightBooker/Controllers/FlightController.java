@@ -7,15 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.ericlara.flightBooker.Models.FlightDto;
 import com.ericlara.flightBooker.Models.FlightNotFoundException;
@@ -81,10 +78,6 @@ public class FlightController {
         return "flights/flights";
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public RedirectView handleMissingParams(MissingServletRequestParameterException e) {
-        return new RedirectView("/");
-    }
 
     // Handle flight search form submission
     @PostMapping(value = "flights")
@@ -141,6 +134,9 @@ public class FlightController {
     //AND TO DISPLAY THE USERS'S BOOKINGS 
     private UserEntity getLoggedInUserInfo() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        if(loggedInUser == null) {
+            return null;
+        }
         String userName = loggedInUser.getName();
         //System.out.println("USER: " + userName);
         return userService.findUserByEmail(userName);
