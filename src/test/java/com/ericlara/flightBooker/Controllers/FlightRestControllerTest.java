@@ -31,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -46,6 +48,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @WebMvcTest(FlightRestController.class)
 @AutoConfigureMockMvc(addFilters = false) //TO CIRCUMVENT SPRING SECURITY
 @ExtendWith(MockitoExtension.class)
+//@Import(BootstrapData.class)
 public class FlightRestControllerTest {
 
   @Autowired
@@ -108,7 +111,8 @@ public class FlightRestControllerTest {
     flight.setId(Long.valueOf(1));
     mockMvc.perform(delete(FlightRestController.FLIGHT_PATH_ID, flight.getId())
         .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNoContent());
+        .andExpect(status().isNoContent())
+        .andDo(MockMvcResultHandlers.print());
     //longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
     BDDMockito.verify(flightService).deleteFlightById(longArgumentCaptor.capture());
 
@@ -134,14 +138,15 @@ public class FlightRestControllerTest {
 
   @Test
   void testGetFlights() throws Exception {
-
-    BDDMockito.given(flightService.findAllFlights()).willReturn(flights);
-    Mockito.when(flightService.findAllFlights()).thenReturn(flights);
+    Page<Flight> flightPage = new PageImpl<>(flights);
+    BDDMockito.given(flightService.findFlightsByDepartureDate(any(), any(), any())).willReturn(flightPage);
+    Mockito.when(flightService.findFlightsByDepartureDate(any(), any(), any())).thenReturn(flightPage);
 
     mockMvc.perform(get(FlightRestController.FLIGHT_PATH)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+        .andDo(MockMvcResultHandlers.print());
   }
 
   @Test

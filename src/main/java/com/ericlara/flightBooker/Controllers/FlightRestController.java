@@ -5,9 +5,9 @@
 package com.ericlara.flightBooker.Controllers;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ericlara.flightBooker.Models.Flight;
@@ -39,13 +40,14 @@ public class FlightRestController {
 
   // Constructor that injects dependencies for FlightService and AirportService
   public FlightRestController(@Qualifier("flightService") FlightService flightService,
-                                 @Qualifier("airportService") AirportService airportService) {
+                              @Qualifier("airportService") AirportService airportService) {
     this.flightService = flightService;
   }
 
   // Endpoint to update a flight by ID
   @PutMapping(value = FLIGHT_PATH_ID)
-  public ResponseEntity<Flight> updateFlightById(@PathVariable("flightId") Long id, @RequestBody Flight flight) {
+  public ResponseEntity<Flight> updateFlightById(@PathVariable("flightId") Long id, 
+                                                 @RequestBody Flight flight) {
 
     // Try to update the flight
     try {
@@ -58,7 +60,8 @@ public class FlightRestController {
 
   // Endpoint to partially update a flight by ID
   @PatchMapping(value = FLIGHT_PATH_ID)
-  public ResponseEntity<Flight> patchFlightById(@PathVariable("flightId") Long id, @RequestBody Flight flight) {
+  public ResponseEntity<Flight> patchFlightById(@PathVariable("flightId") Long id, 
+                                                @RequestBody Flight flight) {
 
     // Try to partially update the flight
     try {
@@ -86,13 +89,22 @@ public class FlightRestController {
 
   // Endpoint to get all flights for today
   @GetMapping(value = FLIGHT_PATH)
-  public List<Flight> getFlights() {
+  public Page<Flight> getFlights(@RequestParam(name = "pageNumber", required = false) Integer pageNumber,
+                                 @RequestParam(name = "pageSize", required = false) Integer pageSize) {
 
     // Get the current date
     LocalDate today = LocalDate.now();
 
+    if(pageNumber == null) {
+      pageNumber = 0;
+    }
+
+    if(pageSize == null) {
+      pageSize = 25;
+    }
+
     // Get all flights with departure date equals to today
-    return flightService.findFlightsByDepartureDate(today);
+    return flightService.findFlightsByDepartureDate(today, pageNumber, pageSize);
   }
 
   // Endpoint to get a flight by ID

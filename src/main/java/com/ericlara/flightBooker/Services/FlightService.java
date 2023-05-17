@@ -1,7 +1,8 @@
 package com.ericlara.flightBooker.Services;
 
 import java.time.LocalDate;
-import java.util.List;
+
+import org.springframework.data.domain.Page;
 
 import com.ericlara.flightBooker.Models.Flight;
 import com.ericlara.flightBooker.Models.FlightNotFoundException;
@@ -21,7 +22,7 @@ public interface FlightService {
     public Flight findFlightById(Long id) throws FlightNotFoundException;
 
     // Returns all flights with the given departure date
-    public List<Flight> findFlightsByDepartureDate(LocalDate date);
+    public Page<Flight> findFlightsByDepartureDate(LocalDate date, Integer pageNumber, Integer pageSize);
 
     // Saves the given flight and returns the saved flight
     public Flight saveFlight(Flight flight);

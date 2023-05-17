@@ -13,8 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.context.WebApplicationContext;
 
 import com.ericlara.flightBooker.Services.FlightBookService;
 import com.ericlara.flightBooker.Services.FlightService;
@@ -24,11 +22,11 @@ import com.ericlara.flightBooker.Services.UserService;
 @AutoConfigureMockMvc(addFilters = false) // TO CIRCUMVENT SPRING SECURITY
 @ExtendWith(MockitoExtension.class)
 public class BookingsControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
+    // @Autowired
+    // private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext context;
+    // @Autowired
+    // private WebApplicationContext context;
 
     @Autowired
     private BookingsController bookingsController;

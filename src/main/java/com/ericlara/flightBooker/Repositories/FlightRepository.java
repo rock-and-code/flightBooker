@@ -3,6 +3,7 @@ package com.ericlara.flightBooker.Repositories;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -41,7 +42,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
      * @param departureDate The departure date of the flight.
      * @return A list of flights that match the given criteria.
      */
-    @Query(value = "SELECT * FROM flight WHERE departure_date = :departureDate LIMIT 100", nativeQuery = true)
-    List<Flight> findByDepartureDate(@Param("departureDate") LocalDate departureDate);
+    @Query(value = "SELECT * FROM flight WHERE departure_date = :departureDate", nativeQuery = true)
+    List<Flight> findByDepartureDate(@Param("departureDate") LocalDate departureDate, Pageable pageable);
 }
 

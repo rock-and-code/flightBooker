@@ -1,9 +1,12 @@
 package com.ericlara.flightBooker.Services;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ericlara.flightBooker.Models.Flight;
@@ -13,9 +16,37 @@ import com.ericlara.flightBooker.Repositories.FlightRepository;
 @Service("flightService")
 public class FlightServiceImpl implements FlightService {
 
+    private static final int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_PAGE_SIZE = 25;
+
     // Inject the FlightRepository
     @Autowired
     private FlightRepository flightRepository;
+
+    public PageRequest buildPageRequest(Integer pageNumber, Integer pageSize) {
+        int queryPageNumber;
+        int queryPageSize;
+
+        if(pageNumber != null && pageNumber > 0) {
+            queryPageNumber = pageNumber - 1; //Move the index
+        } else {
+            queryPageNumber = DEFAULT_PAGE;
+        }
+
+        if(pageSize == null) {
+            queryPageSize = DEFAULT_PAGE_SIZE;
+        } else {
+            if (pageSize > 1000) {
+                queryPageSize = 1000;
+            } else {
+                queryPageSize = pageSize;
+            }
+        }
+
+        Sort sort =  Sort.by(Sort.Order.asc("DEPARTURE_TIME"));
+
+        return PageRequest.of(queryPageNumber, queryPageSize, sort);
+    }
 
     // Returns all flights
     @Override
@@ -52,8 +83,11 @@ public class FlightServiceImpl implements FlightService {
 
     // Finds flights by departure date
     @Override
-    public List<Flight> findFlightsByDepartureDate(LocalDate date) {
-        return flightRepository.findByDepartureDate(date);
+    public Page<Flight> findFlightsByDepartureDate(LocalDate departureDate, Integer pageNumber, Integer pageSize) {
+        
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+    
+        return new PageImpl<Flight>(flightRepository.findByDepartureDate(departureDate, pageRequest));
     }
 
     // Saves a flight to the repository

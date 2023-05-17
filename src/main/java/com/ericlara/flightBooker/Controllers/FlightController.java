@@ -81,6 +81,10 @@ public class FlightController {
             @RequestParam(name = "departureDate") String departureDate, 
             HttpSession session, Model model) {
 
+        if(origin.isBlank() || destination.isBlank() || departureDate.isBlank()) {
+            return "redirect:/";
+        }
+
         // To limit the date picker from today to its max date (12/31/2120) source:
         // https://stackoverflow.com/questions/47763292/thymeleaf-html5-datepicker-setting-min-date-from-variable-not-working
         LocalDate today = LocalDate.parse(departureDate);
@@ -102,7 +106,7 @@ public class FlightController {
 
     // Handle flight search form submission
     @PostMapping(value = "flights")
-    public String flightsSubmit(@ModelAttribute FlightDto flightDTO, Model model) {
+    public String searchResults(@ModelAttribute FlightDto flightDTO, Model model) {
         // Make a query using flightSearchQuery data
         String origin = flightDTO.getOrigin();
         String destination = flightDTO.getDestination();
