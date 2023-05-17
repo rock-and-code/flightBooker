@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/login")
 public class LoginController {
 
+    // Render the login form
     @GetMapping
     public String login(Model model) {
+        // Return the view name for the login form
         return "authentication/login";
     }
     

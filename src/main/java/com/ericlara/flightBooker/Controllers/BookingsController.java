@@ -52,53 +52,81 @@ public class BookingsController {
     public String checkoutForm(@PathVariable(name = "id", required = false) Long id,
             @ModelAttribute BookingDto bookingDTO, HttpServletResponse response,
             HttpSession session, Model model) throws AuthenticationException {
+        // Get the logged-in user's email and add it to the model
         UserEntity currentUser = getLoggedInUserInfo();
         if (currentUser == null) {
             throw new AuthenticationException();
         }
         model.addAttribute("userEmail", currentUser.getEmail());
+
+        // Get the flight from the database and add it to the model
         try {
             Flight flight = flightService.findFlightById(id);
             model.addAttribute("flight", flight);
         } catch (FlightNotFoundException e) {
+            // Redirect to the flights page with an error message if the flight was not
+            // found
             return "redirect:/?flightNotFound";
         }
 
+        // Create a new BookingDto object and add it to the model
         model.addAttribute("bookingDTO", new BookingDto());
+
+        // Return the view name for the checkout form
         return "bookings/bookingCheckoutForm";
     }
 
     // Add flight to User after pressing book now button on flight details view
     @PostMapping
-    public String bookFlight(@ModelAttribute BookingDto bookingDto, 
-        @PathVariable(name = "id", required = false) Long id, HttpServletResponse response,
-        Model model) {
-        LocalDate today = LocalDate.now(); // TO RECORD THE TRANSACTION DATE
+    public String bookFlight(@ModelAttribute BookingDto bookingDto,
+            @PathVariable(name = "id", required = false) Long id, HttpServletResponse response,
+            Model model) {
+        // Get the current date and time
+        LocalDate today = LocalDate.now();
+
+        // Get the logged-in user's email and add it to the model
         UserEntity currentUser = getLoggedInUserInfo();
+
+        // Get the number of passengers from the BookingDto object
         int passengers = bookingDto.getPassengers();
+
         try {
+             // Try to find the flight from the database
             Flight flightToBook = flightService.findFlightById(id);
-            // BOOK FLIGHT
-            for (int i=0; i<passengers; ++i) {
+
+            // Create a new FlightBook object for each passenger
+            for (int i = 0; i < passengers; ++i) {
                 FlightBook flightBooking = new FlightBook(UUID.randomUUID(), today, currentUser, flightToBook);
                 flightBookService.save(flightBooking);
-            } 
+            }
+
+            // Redirect to the flights page with a success message
+            return "redirect:/?successBooking";
+
         } catch (FlightNotFoundException e) {
-            return "redirect:/?failedBooking"; // FEEDBACK ALERT ON FAILED FLIGHT BOOKING
+            // If the flight was not found, redirect to the flights page with an error
+            // message
+            return "redirect:/?failedBooking";
         }
-        return "redirect:/?successBooking"; // FEEDBACK ALERT ON FLIGHT_SEARCH_FORM
+
     }
 
-
-    //METHOD TO GET AUTHENTICATED USER INFO
-    //THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND 
-    //TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS.
+    // METHOD TO GET AUTHENTICATED USER INFO
+    // THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND
+    // TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS.
     private UserEntity getLoggedInUserInfo() {
+        // Get the authentication object from the SecurityContextHolder
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        if(loggedInUser == null) {
+
+        // If the user is not authenticated, return null
+        if (loggedInUser == null) {
             return null;
         }
+
+        // Get the user's name from the authentication object
         String userName = loggedInUser.getName();
+
+        // Get the user from the database
         return userService.findUserByEmail(userName);
     }
 }

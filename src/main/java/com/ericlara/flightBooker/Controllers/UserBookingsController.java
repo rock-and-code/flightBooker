@@ -33,36 +33,62 @@ public class UserBookingsController {
         this.flightBookService = flightBookService;
     }
 
-    //METHOD TO DISPLAY USER'S BOOKINGS
+    // METHOD TO DISPLAY USER'S BOOKINGS
     @PostMapping
     public String getUserBookings(HttpServletResponse response, Model model) {
+        // Get the logged-in user's email and add it to the model
         UserEntity currentUser = getLoggedInUserInfo();
 
         model.addAttribute("userEmail", currentUser.getEmail());
+
+        // Get the user's bookings and add them to the model
         model.addAttribute("bookings", flightBookService.findAllByUser(currentUser));
+
+        // Return the view name for the user's bookings
         return "bookings/userBookings";
     }
 
-    //METHOD TO CANCEL ONE USER'S BOOKING AT A TIME
+    // METHOD TO CANCEL ONE USER'S BOOKING AT A TIME
     @PostMapping(value = "{flightBookingId}")
-    public String deleteUserBooking(@PathVariable("flightBookingId")Long id, HttpServletResponse response, Model model) {
+    public String deleteUserBooking(@PathVariable("flightBookingId") Long id, HttpServletResponse response, Model model) {
+        // Get the flight booking to delete
         Optional<FlightBook> flightBookToDelete = flightBookService.findById(id);
-        //DELETE USER'S FLIGHT BOOKING
-        flightBookService.delete(flightBookToDelete.get());
+
+        // Delete the flight booking
+        if (flightBookToDelete.isPresent()) {
+            flightBookService.delete(flightBookToDelete.get());
+        }
+
+        // Get the logged-in user's email and add it to the model
         UserEntity currentUser = getLoggedInUserInfo();
+
         model.addAttribute("userEmail", currentUser.getEmail());
+
+        // Get the user's bookings and add them to the model
         model.addAttribute("bookings", flightBookService.findAllByUser(currentUser));
+
+        // Return the view name for the user's bookings
         return "bookings/userBookings";
     }
 
-
-    //METHOD TO GET AUTHENTICATED USER INFO
-    //THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND 
-    //TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS,
-    //AND TO DISPLAY THE USERS'S BOOKINGS 
+    // METHOD TO GET AUTHENTICATED USER INFO
+    // THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND 
+    // TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS,
+    // AND TO DISPLAY THE USERS'S BOOKINGS 
     private UserEntity getLoggedInUserInfo() {
+        // Get the authentication object from the SecurityContextHolder
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        String userName = loggedInUser.getName(); //Username = email
+
+        // If the user is not authenticated, return null
+        if (loggedInUser == null) {
+            return null;
+        }
+
+        // Get the user's name from the authentication object
+        String userName = loggedInUser.getName(); // Username = email
+
+        // Get the user from the database
         return userService.findUserByEmail(userName);
     }
 }
+

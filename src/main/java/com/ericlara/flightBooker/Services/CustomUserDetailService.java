@@ -12,20 +12,29 @@ import com.ericlara.flightBooker.Repositories.UserRepository;
 
 @Service("userDetailService")
 public class CustomUserDetailService implements UserDetailsService {
+
+    // Inject the UserRepository
     @Autowired
     private UserRepository userRepository;
 
+    // Implement the loadUserByUsername method
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        final UserEntity user = userRepository.findByEmail(username);
-        if(user == null) {
+        // Get the user from the database by email
+        UserEntity user = userRepository.findByEmail(username);
+
+        // If the user is not found, throw an exception
+        if (user == null) {
             throw new UsernameNotFoundException(username);
         }
+
+        // Create a UserDetails object from the user entity
         UserDetails userDetails = User.withUsername(user.getEmail())
                 .password(user.getPassword())
                 .authorities("USER").build();
 
+        // Return the UserDetails object
         return userDetails;
     }
-    
+
 }

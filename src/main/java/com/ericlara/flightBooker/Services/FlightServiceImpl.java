@@ -12,7 +12,8 @@ import com.ericlara.flightBooker.Repositories.FlightRepository;
 
 @Service("flightService")
 public class FlightServiceImpl implements FlightService {
-    
+
+    // Inject the FlightRepository
     @Autowired
     private FlightRepository flightRepository;
 
@@ -72,7 +73,6 @@ public class FlightServiceImpl implements FlightService {
     public void deleteFlightById(Long id) {
         flightRepository.deleteById(id);
     }
-    
 
     // Updates a flight by ID
     @Override
@@ -89,9 +89,7 @@ public class FlightServiceImpl implements FlightService {
             existing.setFlightNumber(flight.getFlightNumber());
             existing.setDepartureDate(flight.getDepartureDate());
             existing.setDepartureTime(flight.getDepartureTime());
-            Flight updated = flightRepository.save(existing);
-            //No needed to return updated object... just facilitate debugging
-            return updated;
+            return flightRepository.save(existing);
         }
     }
 
@@ -117,10 +115,6 @@ public class FlightServiceImpl implements FlightService {
                 existing.setAvailableSeats(flight.getAvailableSeats());
             }
             if (flight.getFlightNumber() != null) {
-                // Note: existing.getFlightNumber() should be replaced with
-                // flight.getFlightNumber()
-                // since existing.getFlightNumber() will always return a non-null value (line
-                // 19)
                 existing.setFlightNumber(flight.getFlightNumber());
             }
             if (flight.getDepartureDate() != null) {

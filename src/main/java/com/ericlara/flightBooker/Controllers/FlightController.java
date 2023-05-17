@@ -34,6 +34,7 @@ public class FlightController {
     private final AirportService airportService;
     private final UserService userService;
 
+    // Constructor
     public FlightController(@Qualifier("flightService") FlightService flightService,
             @Qualifier("airportService") AirportService airportService,
             @Qualifier("userService") UserService userService) {
@@ -54,11 +55,22 @@ public class FlightController {
         // cookie.setPath("/");
         // response.addCookie(cookie);
 
+        // Get the current date
         LocalDate today = LocalDate.now();
+
+        // Add the current date to the model
         model.addAttribute("today", today);
+
+        // Create a new FlightDto object and add it to the model
         model.addAttribute("flightDTO", new FlightDto());
+
+        // Get the logged-in user's email and add it to the model
         model.addAttribute("userEmail", getLoggInUserEmail());
+
+        // Get all airports and add them to the model
         model.addAttribute("airports", airportService.findAllSortedASC());
+
+        // Return the "flights/flightSearchForm" view
         return "flights/flightSearchForm";
     }
 
@@ -70,11 +82,20 @@ public class FlightController {
             HttpSession session, Model model) {
 
         // To limit the date picker from today to its max date (12/31/2120) source:
+        // https://stackoverflow.com/questions/47763292/thymeleaf-html5-datepicker-setting-min-date-from-variable-not-working
         LocalDate today = LocalDate.parse(departureDate);
+
+        // Get all airports and add them to the model
         model.addAttribute("airports", airportService.findAll());
+
+        // Get the logged-in user's email and add it to the model
         model.addAttribute("userEmail", getLoggInUserEmail());
+
+        // Get all flights that match the search criteria and add them to the model
         model.addAttribute("flights", flightService
                 .findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin, destination, today, 1));
+
+        // Return the "flights/flights" view
         return "flights/flights";
     }
 
@@ -112,8 +133,8 @@ public class FlightController {
             String referrer = "/flights/" + id;
             request.getSession().setAttribute("url_prior_login", referrer);
         } catch (FlightNotFoundException e) {
-            // Return a message if the flight was not found
-            return new FlightNotFoundException().getMessage();
+            // Redirects user to search form and displays a message if the flight was not found
+            return "redirect:/?flightNotFound";
         }
 
         return "flights/flightDetails";

@@ -27,95 +27,117 @@ import com.ericlara.flightBooker.Services.CustomUserDetailService;
 @EnableWebSecurity
 public class SpringSecurity {
 
-    @Autowired
-    private CustomUserDetailService userDetailsService;
+  // The custom user details service that provides access to user information
+  @Autowired
+  private CustomUserDetailService userDetailsService;
 
-    @Autowired
-    private DataSource dataSource;
+  // The data source that is used to store user information
+  @Autowired
+  private DataSource dataSource;
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  // A bean that is used to configure the security filter chain
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH
-                        .requestMatchers("/flights/**").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS
-                        // PATH
-                        .requestMatchers("/h2-console/").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS
-                        // PATH
-                        .requestMatchers("/api/v1/**").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH
-                        // WITHOUT REQUESTING AUTHENTICATION
-                        .requestMatchers("/register/**").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS
-                        // PATH WITHOUT REQUESTING AUTHENTICATION
-                        .requestMatchers("/login/**").permitAll() // SPECIFIES SPRING BOOT TO ALLOW ACCESS TO THIS PATH
-                        // WITHOUT REQUESTING AUTHENTICATION
-                        .anyRequest().authenticated()
-                        )
-                .authenticationProvider(authenticationProvider())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console())) // TO ALLOW US ACCESS TO THE H2 DATABASE CONSOLE
-                .headers(headers -> headers.frameOptions().disable()) // TO ALLOW US ACCESS TO THE H2 DATABASE CONSOLE
-                .formLogin((form) -> form
-                        //.defaultSuccessUrl("/?successLogin", true) // SPECIFIES SRRINGBOOT THE PATH TO REDIRECT USER FOR
-                        .successHandler(successHandler())                                         // SUCESSFULL LOGIN
-                        .loginPage("/login")
-                        .failureUrl("/login?error")
-                        .loginProcessingUrl("/login")
-                        .permitAll())
-                .rememberMe(me -> me.userDetailsService(userDetailsService))
-                // .rememberMe().tokenRepository(persistentTokenRepository()).and() //To create
-                // a cookie to remember user
-                // .sessionManagement(session -> session
-                // .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                // .invalidSessionUrl("/logout")
-                // .maximumSessions(1)
-                // .maxSessionsPreventsLogin(false))
-                .logout((logout) -> logout
-                        .deleteCookies("JSESSIONID", "dummyCookie")
-                        // .logoutSuccessUrl("/login?logout")
-                        // .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        // .logoutRequestMatcher(new AntPathRequestMatcher("/login?logout"))
-                        // .logoutSuccessUrl("/login?logout")
-                        .permitAll());
+    // Configure the security filter chain
+    http
+        // Allow all requests to the following paths
+        .authorizeHttpRequests((requests) -> requests
+            .requestMatchers("/").permitAll()
+            .requestMatchers("/flights/**").permitAll()
+            .requestMatchers("/h2-console/").permitAll()
+            .requestMatchers("/api/v1/**").permitAll()
+            .requestMatchers("/register/**").permitAll()
+            .requestMatchers("/login/**").permitAll()
+            // All other requests require authentication
+            .anyRequest().authenticated()
+        )
+        // Configure the authentication provider
+        .authenticationProvider(authenticationProvider())
+        // Configure CSRF protection
+        .csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console()))
+        // Configure HTTP headers
+        .headers(headers -> headers.frameOptions().disable())
+        // Configure form login
+        .formLogin((form) -> form
+            // Set the success handler
+            .successHandler(successHandler())
+            // Set the login page
+            .loginPage("/login")
+            // Set the error page
+            .failureUrl("/login?error")
+            // Set the login processing URL
+            .loginProcessingUrl("/login")
+            // Allow all requests to the login page
+            .permitAll())
+        // Configure remember me
+        .rememberMe(me -> me.userDetailsService(userDetailsService))
+        // Configure logout
+        .logout((logout) -> logout
+            // Delete the JSESSIONID and dummyCookie cookies
+            .deleteCookies("JSESSIONID", "dummyCookie")
+            // Allow all requests to the logout page
+            .permitAll());
 
-        // .exceptionHandling().accessDeniedPage("/access-denied");
-        return http.build();
-    }
+    // Return the security filter chain
+    return http.build();
+  }
 
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+  // A bean that is used to create a DaoAuthenticationProvider
+  @Bean
+  public DaoAuthenticationProvider authenticationProvider() {
+    // Create a DaoAuthenticationProvider
+    DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        authenticationProvider.setUserDetailsService(userDetailsService); // To load user information
+    // Set the password encoder
+    authenticationProvider.setPasswordEncoder(passwordEncoder());
 
-        return authenticationProvider;
-    }
+    // Set the user details service
+    authenticationProvider.setUserDetailsService(userDetailsService);
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+    // Return the DaoAuthenticationProvider
+    return authenticationProvider;
+  }
 
-    @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  // A bean that is used to create an AuthenticationManager
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    // Return the AuthenticationManager from the AuthenticationConfiguration
+    return authConfig.getAuthenticationManager();
+  }
 
-    @Bean
-    public PersistentTokenRepository persistentTokenRepository() {
-        JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
-        db.setDataSource(dataSource);
-        return db;
-    }
+  // A bean that is used to create a BCryptPasswordEncoder
+  @Bean
+  public static PasswordEncoder passwordEncoder() {
+    // Return a BCryptPasswordEncoder
+    return new BCryptPasswordEncoder();
+  }
 
-    @Autowired
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+  // A bean that is used to create a JdbcTokenRepositoryImpl
+  @Bean
+  public PersistentTokenRepository persistentTokenRepository() {
+    // Create a JdbcTokenRepositoryImpl
+    JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
 
-    @Bean
-    public AuthenticationSuccessHandler successHandler() {
-        return new CustomLoginSuccessHandler("/?successLogin");
-    }
+    // Set the data source
+    db.setDataSource(dataSource);
+
+    // Return the JdbcTokenRepositoryImpl
+    return db;
+  }
+
+  // A method that is used to configure the AuthenticationManagerBuilder
+  @Autowired
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    // Configure the AuthenticationManagerBuilder with the custom user details service and password encoder
+    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+  }
+
+  // A bean that is used to create a CustomLoginSuccessHandler
+  @Bean
+  public AuthenticationSuccessHandler successHandler() {
+    // Create a CustomLoginSuccessHandler
+    return new CustomLoginSuccessHandler("/?successLogin");
+  }
 
 }

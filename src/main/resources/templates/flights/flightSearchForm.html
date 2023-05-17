@@ -84,7 +84,7 @@
                 <!-- ALERTS TO PROVIDE USER FEEDBACK ON SUCCESSFUL REGISTRATION -->
                 <div th:if="${param.success}">
                     <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                        Registration successful
+                        Thanks for your registration and welcome to flightbooker!
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
@@ -99,6 +99,13 @@
                 <div th:if="${param.successBooking}">
                     <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
                         Flight Booked Successfully
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                <!-- ALERTS TO PROVIDE USER FEEDBACK ON FLIGHT NOT FOUND ERROR  -->
+                <div th:if="${param.flightNotFound}">
+                    <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
+                        Flight Not Found
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
