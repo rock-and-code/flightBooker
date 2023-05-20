@@ -40,7 +40,7 @@
 
     <div class="container">
         <div class="row mt-5">
-            <div class="col-6 mx-auto">
+            <div class="col-md-6 mx-auto">
                 <form method="post" role="form" th:action="@{/register}" th:object="${userDto}">
                     <h1>Registration Form</h1>
                     <!-- <div class="alert alter-danger" th:if="${#fields.hasErrors('*')}">
@@ -71,10 +71,10 @@
                         <p th:if="${#fields.hasErrors('password')}" class="text-danger" th:errors="*{password}" />
                     </div>
                     <div class="mb-3">
-                        <button class="btn btn-primary col-12" type="submit">Register</button>
+                        <button class="btn btn-dark col-12" type="submit">Sign Up</button>
                     </div>
                     <div class="mb-3 text-center">
-                        <a class="link-primary text-decoration-none" th:href="@{/login}">Login</a>
+                        <a class="link-dark text-decoration-none" th:href="@{/login}">Login</a>
                     </div>
                 </form>
             </div>

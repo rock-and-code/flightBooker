@@ -97,6 +97,7 @@ public class RegistrationController {
 
         // Set the authentication in the session
         request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
     }
 
 }

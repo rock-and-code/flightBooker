@@ -4,6 +4,7 @@ package com.ericlara.flightBooker.bootstrap;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -42,7 +43,7 @@ public class BootstrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //CREATES A USER FOR DEMOSTRATION PURPOSES ONLY, THE APP ALLOWS NEW USERS TO BE REGISTERED
-        UserEntity user = new UserEntity("userFirstName", "userLastName", "user@email.com", passwordEncoder.encode("password"), List.of(new Role("USER")), new ArrayList<>());
+        UserEntity user = new UserEntity("userFirstName", "userLastName", "user@email.com", passwordEncoder.encode("password"), List.of(new Role("USER")), new HashSet<>());
         //SAVES USER TO THE MEMORY DBA
         userRepository.save(user);
         //DISPLAY CREDENTIALS IN THE CONSOLE SO USER CAN TEST THE APP, OTHERWISE THE CAN CREATE AN ACCOUNT

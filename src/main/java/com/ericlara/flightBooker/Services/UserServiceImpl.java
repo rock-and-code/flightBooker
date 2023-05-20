@@ -1,7 +1,7 @@
 package com.ericlara.flightBooker.Services;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
                 userDto.getEmail(),
                 passwordEncoder.encode(userDto.getPassword()),
                 Arrays.asList(role),
-                new ArrayList<>()
+                new HashSet<>()
         );
 
         // Save the UserEntity object

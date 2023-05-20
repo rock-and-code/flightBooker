@@ -40,7 +40,7 @@
 
     <div class="container">
         <div class="row mt-5">
-            <div class="col-6 mx-auto">
+            <div class="col-md-6 mx-auto">
                 <div th:if="${param.error}">
                     <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
                         Invalid Email or Password
@@ -72,10 +72,10 @@
                         <label class="form-check-label" for="remember">Remember Me</label>
                     </div>
                     <div class="mb-3">
-                        <button class="btn btn-primary mb-3 col-12" type="submit">Login</button>
+                        <button class="btn btn-dark mb-3 col-12" type="submit">Login</button>
                     </div>
                     <div class="mb-3 text-center">
-                        <a class="link-primary text-decoration-none" th:href="@{/register}">Register</a>
+                        <a class="link-dark text-decoration-none" th:href="@{/register}">Sign Up</a>
                     </div>
                 </form>
             </div>

@@ -56,7 +56,7 @@
                             </li>
                         </ul>
                     </div>
-                    <!-- DISPLAY EITHER LOGIN OR LOGOUT BUTTON BASED ON WHETHER USER HAS BEEN AUTHENTICATED -->
+                    <!-- DISPLAY LOG IN / SIGN UP FOR UNAUTHENTICATED USERS-->
                     <div class="flex-shrink-0 dropdown" th:if="${userEmail == null}">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,6 +70,12 @@
                                     <button type="submit" class="dropdown-item">Log In</button>
                                 </form>
                             </li>
+                            <hr class="dropdown-divider">
+                            <li class="nav-item">
+                                <form th:action="@{/register}" method="get">
+                                    <button type="submit" class="dropdown-item">Sign Up</button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -80,7 +86,7 @@
 
     <div class="container">
         <div class="container">
-            <div class="container gap-2 col-8" id="search-form">
+            <div class="container mx-auto col-md-6" id="search-form">
                 <!-- ALERTS TO PROVIDE USER FEEDBACK ON SUCCESSFUL REGISTRATION -->
                 <div th:if="${param.success}">
                     <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">

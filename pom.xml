@@ -76,7 +76,9 @@
 	<dependency>
 		<groupId>org.projectlombock</groupId>
 		<artifactId>lombock</artifactId>
-		<optional>true</optional>
+		<version>1.18.26</version>
+		<scope>provided</scope>
+
 	</dependency>
 
 	<dependency>

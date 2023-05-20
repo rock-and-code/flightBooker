@@ -56,10 +56,11 @@
                             </li>
                         </ul>
                     </div>
-                    <!-- DISPLAY LOG IN -->
+                    <!-- DISPLAY LOG IN / SIGN UP FOR UNAUTHENTICATED USERS -->
                     <div class="flex-shrink-0 dropdown" th:if="${userEmail == null}">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
+                            <!-- IMAGE OF A PROFILE ICON -->
                             <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png" alt="mdo" width="32" height="32"
                                 class="rounded-circle">
                         </a>
@@ -67,6 +68,12 @@
                             <li class="nav-item">
                                 <form th:action="@{/login}" method="get">
                                     <button type="submit" class="dropdown-item">Log In</button>
+                                </form>
+                            </li>
+                            <hr class="dropdown-divider">
+                            <li class="nav-item">
+                                <form th:action="@{/register}" method="get">
+                                    <button type="submit" class="dropdown-item">Sign Up</button>
                                 </form>
                             </li>
                         </ul>
@@ -110,6 +117,9 @@
                                         <p class="card-text "><small class="text-muted"
                                                 th:text="|Departure Time: |"></small><span class="text-dark-emphasis"
                                                 th:text="${flight.formattedDepartureTime}"></span></p>
+                                        <p class="card-text "><small class="text-muted"
+                                                th:text="|Price: |"></small><span class="text-dark-emphasis"
+                                                th:text="${flight.formattedPrice}"></span></p>
                                         <p class="card-text"><small class="text-muted"
                                                 th:text="|Available Seats: |"></small><span class="text-dark-emphasis"
                                                 th:text="${flight.availableSeats}"></span></p>

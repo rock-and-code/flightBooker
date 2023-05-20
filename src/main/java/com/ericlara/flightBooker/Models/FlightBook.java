@@ -8,7 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -27,11 +26,11 @@ public class FlightBook {
     private LocalDate bookedDate;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
+    //@JoinColumn(name = "USER_ID")
     private UserEntity user;
 
     @ManyToOne
-    @JoinColumn(name = "FLIGHT_ID")
+    //@JoinColumn(name = "FLIGHT_ID")
     private Flight flight;
 
 

@@ -1,7 +1,9 @@
 package com.ericlara.flightBooker.Models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.context.annotation.Scope;
 
@@ -50,12 +52,12 @@ public class UserEntity {
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user") //MAPPED BY PROPERTY NOT COLUMN NAME
-    private List<FlightBook> flightbookings = new ArrayList<>();
+    private Set<FlightBook> flightbookings = new HashSet<>();
 
     public UserEntity(){}
 
     public UserEntity(String firstName, String lastName, String email, String password, List<Role> roles,
-            List<FlightBook> flightbookings) {
+            Set<FlightBook> flightbookings) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -100,10 +102,10 @@ public class UserEntity {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
-    public List<FlightBook> getFlightbookings() {
+    public Set<FlightBook> getFlightbookings() {
         return flightbookings;
     }
-    public void setFlightbookings(List<FlightBook> flightbookings) {
+    public void setFlightbookings(Set<FlightBook> flightbookings) {
         this.flightbookings = flightbookings;
     }
     @Override

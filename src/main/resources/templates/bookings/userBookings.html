@@ -86,7 +86,7 @@
                                     <div class="d-md-flex justify-content-between">
                                         <h5 class="card-title" th:text="|Confirmation No: ${booking.bookingNumber}|">
                                         </h5>
-                                        <h5 class="card-title" th:text="|Booked Date: ${booking.bookedDate}|"></h5>
+                                        <h5 class="card-title" th:text="|Booking Date: ${booking.bookedDate}|"></h5>
                                     </div>
                                     <div class="d-md-flex justify-content-between">
                                         <p class="card-text"><small class="text-muted"
@@ -114,8 +114,8 @@
                                     <form th:action="@{/bookings/user/{id}(id=${booking.id})}" method="POST">
                                         <button type="submit" class="btn btn-dark col-12">Cancel</button>
                                     </form>
-                                    <!-- <a class="btn btn-dark col-12"
-                                        th:href="@{/bookings/user/{id}(id=${booking.id})}">Cancel</a> -->
+                                    <a class="btn btn-outline-secondary col-12 my-3"   
+                                        th:href="@{/flights/{id}(id=${booking.flight.id})}">Flight Details</a>
                                 </div>
                             </div>
                         </div>

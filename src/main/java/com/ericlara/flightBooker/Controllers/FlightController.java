@@ -45,8 +45,8 @@ public class FlightController {
 
     // Render flight search form
     @GetMapping
-    public String flightsForm(HttpServletResponse response,
-            @ModelAttribute FlightDto flightDTO, HttpSession session, Model model) {
+    public String flightsForm(HttpServletRequest request, HttpServletResponse response,
+            @ModelAttribute FlightDto flightDto, Model model) {
         // To limit the date picker from today to its max date (12/31/2120) source:
         // https://stackoverflow.com/questions/47763292/thymeleaf-html5-datepicker-setting-min-date-from-variable-not-working
         // INBJECT A COOKIE FOR DEMOSTRATIONS PURPOSES
@@ -55,6 +55,15 @@ public class FlightController {
         // cookie.setPath("/");
         // response.addCookie(cookie);
 
+        // Check if flightDetails url has been saved to redirect user that have registered
+        // to book a flight
+        HttpSession session = request.getSession();
+        String redirectUrl = (String) session.getAttribute("url_prior_login");
+        if (redirectUrl != null) {
+            // Don't forget to clean this attribute from session
+            session.removeAttribute("url_prior_login");
+            return "redirect:" + redirectUrl;
+        }
         // Get the current date
         LocalDate today = LocalDate.now();
 
@@ -78,10 +87,10 @@ public class FlightController {
     @GetMapping(value = "flights")
     public String getAllFlights(@RequestParam(name = "origin") String origin,
             @RequestParam(name = "destination") String destination,
-            @RequestParam(name = "departureDate") String departureDate, 
+            @RequestParam(name = "departureDate") String departureDate,
             HttpSession session, Model model) {
 
-        if(origin.isBlank() || destination.isBlank() || departureDate.isBlank()) {
+        if (origin.isBlank() || destination.isBlank() || departureDate.isBlank()) {
             return "redirect:/";
         }
 
@@ -103,20 +112,19 @@ public class FlightController {
         return "flights/flights";
     }
 
-
     // Handle flight search form submission
     @PostMapping(value = "flights")
-    public String searchResults(@ModelAttribute FlightDto flightDTO, Model model) {
+    public String searchResults(@ModelAttribute FlightDto flightDto, Model model) {
         // Make a query using flightSearchQuery data
-        String origin = flightDTO.getOrigin();
-        String destination = flightDTO.getDestination();
-        LocalDate departureDate = flightDTO.getDepartureDate();
-        int passengers = flightDTO.getNumOfPassengers();
+        String origin = flightDto.getOrigin();
+        String destination = flightDto.getDestination();
+        LocalDate departureDate = flightDto.getDepartureDate();
+        int passengers = flightDto.getNumOfPassengers();
 
         // System.out.println("Origin: " + origin + " Destination: " + destination
         // + " Departure Date: " + departureDate + " No Passengers: " + passengers);
         model.addAttribute("userEmail", getLoggInUserEmail());
-        model.addAttribute("flightSearchQuery", flightDTO);
+        model.addAttribute("flightSearchQuery", flightDto);
         model.addAttribute("flights",
                 flightService.findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin,
                         destination, departureDate, passengers));
@@ -127,43 +135,48 @@ public class FlightController {
     // Retrieve flight details by ID and display them
     @GetMapping(value = "flights/{id}")
     public String getFlightDetails(@PathVariable(name = "id", required = false) Long id,
-        HttpServletRequest request, HttpSession session, Model model) {
+            HttpServletRequest request, HttpSession session, Model model) {
         try {
             // Add the found flight to the model
             model.addAttribute("flight", flightService.findFlightById(id));
             model.addAttribute("userEmail", getLoggInUserEmail());
-            //Saving the fligh url in case user has to be redirected after login
-            //String referrer = request.getHeader("Referer");
-            String referrer = "/flights/" + id;
-            request.getSession().setAttribute("url_prior_login", referrer);
+            // Saving the fligh url in case user has to be redirected after login if the
+            // user is
+            // not authenticated
+            if (getLoggInUserEmail() == null) {
+                // String referrer = request.getHeader("Referer");
+                String referrer = "/flights/" + id;
+                request.getSession().setAttribute("url_prior_login", referrer);
+            }
         } catch (FlightNotFoundException e) {
-            // Redirects user to search form and displays a message if the flight was not found
+            // Redirects user to search form and displays a message if the flight was not
+            // found
             return "redirect:/?flightNotFound";
         }
 
         return "flights/flightDetails";
     }
 
-     //METHOD TO GET AUTHENTICATED USER EMAIL
+    // METHOD TO GET AUTHENTICATED USER EMAIL
     private String getLoggInUserEmail() {
-        if (getLoggedInUserInfo() == null) { //User has not been authenticated yet
+        if (getLoggedInUserInfo() == null) { // User has not been authenticated yet
             return null;
-        } else { //User is authenticated
+        } else { // User is authenticated
             return getLoggedInUserInfo().getEmail();
         }
     }
 
-    //METHOD TO GET AUTHENTICATED USER INFO
-    //THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND 
-    //TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS,
-    //AND TO DISPLAY THE USERS'S BOOKINGS 
+    // METHOD TO GET AUTHENTICATED USER INFO
+    // THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND
+    // TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS,
+    // AND TO DISPLAY THE USERS'S BOOKINGS
     private UserEntity getLoggedInUserInfo() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        if(loggedInUser == null) {
+        if (loggedInUser == null) {
             return null;
         }
         String userName = loggedInUser.getName();
-        //System.out.println("USER: " + userName);
+        // System.out.println("USER: " + userName);
         return userService.findUserByEmail(userName);
     }
 }

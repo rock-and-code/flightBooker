@@ -47,7 +47,7 @@ public class BookingsController {
         this.flightBookService = flightBookService;
     }
 
-    // Render flight search form
+    // Render flight booking checkout form
     @GetMapping
     public String checkoutForm(@PathVariable(name = "id", required = false) Long id,
             @ModelAttribute BookingDto bookingDTO, HttpServletResponse response,
@@ -98,6 +98,10 @@ public class BookingsController {
             for (int i = 0; i < passengers; ++i) {
                 FlightBook flightBooking = new FlightBook(UUID.randomUUID(), today, currentUser, flightToBook);
                 flightBookService.save(flightBooking);
+                
+                //Decrements availables seats since we are booking a seat
+                flightToBook.decrementAvailableSeats(); 
+    
             }
 
             // Redirect to the flights page with a success message

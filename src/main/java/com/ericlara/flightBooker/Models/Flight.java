@@ -124,6 +124,14 @@ public class Flight {
         return availableSeats;
     }
 
+    public void decrementAvailableSeats() {
+        this.availableSeats--;
+    }
+
+    public void incrementAvailableSeats() {
+        this.availableSeats++;
+    }
+
     public void setAvailableSeats(int availableSeats) {
         this.availableSeats = availableSeats;
     }

@@ -56,6 +56,8 @@ public class UserBookingsController {
 
         // Delete the flight booking
         if (flightBookToDelete.isPresent()) {
+            //Increment the flight's available seats since we are cancelling a booking
+            flightBookToDelete.get().getFlight().incrementAvailableSeats();
             flightBookService.delete(flightBookToDelete.get());
         }
 
