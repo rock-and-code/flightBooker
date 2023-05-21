@@ -157,6 +157,12 @@ public class FlightServiceImpl implements FlightService {
             if (flight.getDepartureTime() != null) {
                 existing.setDepartureTime(flight.getDepartureTime());
             }
+            if (flight.getPrice() != null) {
+                existing.setPrice(flight.getPrice());
+            }
+            if (flight.getBookings() != null) {
+                existing.setBookings(flight.getBookings());
+            }
             // Save the updated flight object to the repository and return the patched
             // flight
             Flight patched = flightRepository.save(existing);

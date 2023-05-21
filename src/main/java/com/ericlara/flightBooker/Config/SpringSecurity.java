@@ -56,6 +56,7 @@ public class SpringSecurity {
         .authenticationProvider(authenticationProvider())
         // Configure CSRF protection
         .csrf(csrf -> csrf.ignoringRequestMatchers(toH2Console()))
+        .csrf(csrf -> csrf.ignoringRequestMatchers("/api/v1/**"))
         // Configure HTTP headers
         .headers(headers -> headers.frameOptions().disable())
         // Configure form login
