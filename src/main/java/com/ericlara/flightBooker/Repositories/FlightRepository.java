@@ -44,5 +44,14 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
      */
     @Query(value = "SELECT * FROM flight WHERE departure_date = :departureDate", nativeQuery = true)
     List<Flight> findByDepartureDate(@Param("departureDate") LocalDate departureDate, Pageable pageable);
+
+     /**
+     * Returns a list of flights that match the given departure date.
+     *
+     * @param departureDate The departure date of the flight.
+     * @return A list of flights that match the given criteria.
+     */
+    @Query(value = "SELECT * FROM flight WHERE departure_date >= :departureDate ORDER BY departure_date ASC", nativeQuery = true)
+    List<Flight> findFromDepartureDate(@Param("departureDate") LocalDate departureDate, Pageable pageable);
 }
 

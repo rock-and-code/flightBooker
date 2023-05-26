@@ -1,13 +1,6 @@
 # Flight Booker App
 This is a web-based air travel booker app built with Bootstrap and Spring Boot. It allows users to search for and book flights, view flight details, and manage their bookings. The app is built with a responsive and modern UI using Bootstrap for the frontend, and Spring Boot for the backend to handle user authentication, flight data retrieval, and booking processing.
 
-# Getting Started
-Prerequisites
-To run the app, you will need to have the following installed:
-<ul>
-  <li>Java 17 or above</li>
-</ul>
-
 # Installation
 Clone the repository:
 
@@ -32,6 +25,139 @@ View flight details: Users can view flight details such as departure times, flig
 Features pending to be added:
 Book flights: Users can select a flight and book tickets for it, specifying the number of passengers.
 Manage bookings: Users can view and manage their bookings, including canceling bookings.
+
+# FlightRestController
+The app provides a RESTful API for managing flights.
+### Endpoints
+
+### Update a flight by ID
+Method: <code>PUT</code>
+
+URL: <code>/api/v1/flights/{flightId}</code>
+
+Request body: A JSON object containing the flight data to update.
+
+Response:
+<ul>
+  <li><code>204 No Content</code>: The flight was updated successfully.</li>
+  <li><code>404 Not Found</code>: The flight was not found.</li>
+</ul>
+
+### Partially update a flight by ID
+Method: <code>PATCH</code>
+
+URL: <code>/api/v1/flights/{flightId}</code>
+
+Request body: A JSON object containing the flight data to update.
+
+Response:
+<ul>
+  <li><code>204 No Content</code>: The flight was updated successfully.</li>
+  <li><code>404 Not Found</code>: The flight was not found.</li>
+</ul>
+
+### Save a flight
+Method: <code>POST</code>
+
+URL: <code>/api/v1/flights</code>
+
+Request body: A JSON object containing the flight data to save.
+
+Response:
+<ul>
+  <li><code>201 Created</code>: The flight was created successfully.</li>
+</ul>
+
+### Get all flights for today
+Method: <code>GET</code>
+
+URL: <code>/api/v1/flights/today</code>
+
+Query parameters:
+<ul>
+  <li><code>pageNumber</code>: The page number to return. Defaults to 0.</li>
+  <li><code>pageSize</code>: The number of flights per page. Defaults to 25.</li>
+</ul>
+
+Response:
+<ul>
+  <li><code>200 OK</code>: A paginated list of flights.</li>
+</ul>
+
+### Get all flights starting from today
+Method: <code>GET</code>
+
+URL: <code>/api/v1/flights</code>
+
+Query parameters:
+<ul>
+  <li><code>pageNumber</code>: The page number to return. Defaults to 0.</li>
+  <li><code>pageSize</code>: The number of flights per page. Defaults to 25.</li>
+</ul>
+
+Response:
+<ul>
+  <li><code>200 OK</code>: A paginated list of flights.</li>
+</ul>
+
+### Get a flight by ID
+Method: <code>GET</code>
+
+URL: <code>/api/v1/flights/{flightId}</code>
+
+Response:
+<ul>
+  <li><code>200 OK</code>: The flight.</li>
+  <li><code>404 Not Found</code>: The flight was not found.</li>
+</ul>
+
+### Delete a flight by ID
+Method: <code>DELETE</code>
+
+URL: <code>/api/v1/flights/{flightId}</code>
+
+Response:
+<ul>
+  <li><code>204 No Content</code>: The flight was deleted successfully.</li>
+  <li><code>404 Not Found</code>: The flight was not found.</li>
+</ul>
+
+### Request body
+The request body for all endpoints that accept a request body is a JSON object containing the following properties:
+<ul>
+  <li><code>departureAirport</code>: The departure airport code.</li>
+  <li><code>arrivalAirport</code>: The arrival airport code.</li>
+  <li><code>departureDate</code>: The departure date.</li>
+  <li><code>availableSeats</code>: The number of seats available for sale.</li>
+  <li><code>flightNumber</code>: The flight number.</li>
+  <li><code>price</code>: The flight ticket price.</li>
+</ul>
+
+### Response
+The response for all the get endpoints is a JSON object containing the following properties:
+<ul>
+  <li><code>id</code>: The ID of the flight, if creating or updating a flight.</li>
+  <li><code>departureAirport</code>: The departure airport code.</li>
+  <li><code>arrivalAirport</code>: The arrival airport code.</li>
+  <li><code>departureDate</code>: The departure date.</li>
+  <li><code>availableSeats</code>: The number of seats available for sale.</li>
+  <li><code>flightNumber</code>: The flight number.</li>
+  <li><code>price</code>: The flight ticket price.</li>
+</ul>
+
+### Errors
+The following errors may be returned:
+<ul>
+  <li><code>400 Bad Request</code>: The request body is invalid.</li>
+  <li><code>404 Not Found</code>: The flight was not found.</li>
+</ul>
+
+# Getting Started
+Prerequisites
+To run the app, you will need to have the following installed:
+<ul>
+  <li>Java 17 or above</li>
+</ul>
 
 # Built With
 Bootstrap - Frontend framework

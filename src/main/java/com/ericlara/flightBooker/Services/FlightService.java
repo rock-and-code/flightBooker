@@ -24,6 +24,9 @@ public interface FlightService {
     // Returns all flights with the given departure date
     public Page<Flight> findFlightsByDepartureDate(LocalDate date, Integer pageNumber, Integer pageSize);
 
+    // Returns all flights starting from a given departure date
+    public Page<Flight> findFlightsFromDepartureDate(LocalDate date, Integer pageNumber, Integer pageSize);
+
     // Saves the given flight and returns the saved flight
     public Flight saveFlight(Flight flight);
 

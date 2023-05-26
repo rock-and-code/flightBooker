@@ -89,6 +89,15 @@ public class FlightServiceImpl implements FlightService {
     
         return new PageImpl<Flight>(flightRepository.findByDepartureDate(departureDate, pageRequest));
     }
+    
+    // Finds flights by departure date
+    @Override
+    public Page<Flight> findFlightsFromDepartureDate(LocalDate departureDate, Integer pageNumber, Integer pageSize) {
+        
+        PageRequest pageRequest = buildPageRequest(pageNumber, pageSize);
+    
+        return new PageImpl<Flight>(flightRepository.findFromDepartureDate(departureDate, pageRequest));
+    }
 
     // Saves a flight to the repository
     @Override

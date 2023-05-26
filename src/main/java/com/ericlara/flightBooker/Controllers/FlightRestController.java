@@ -65,7 +65,7 @@ public class FlightRestController {
 
     // Try to partially update the flight
     try {
-      return new ResponseEntity<>(flightService.patchFlightById(id, flight), HttpStatus.OK);
+      return new ResponseEntity<>(flightService.patchFlightById(id, flight), HttpStatus.NO_CONTENT);
     } catch (FlightNotFoundException e) {
       // If the flight is not found, return a response with HTTP status code 302 (Found)
       return ResponseEntity.notFound().build();
@@ -88,7 +88,7 @@ public class FlightRestController {
   }
 
   // Endpoint to get all flights for today
-  @GetMapping(value = FLIGHT_PATH)
+  @GetMapping(value = FLIGHT_PATH + "/today")
   public Page<Flight> getFlights(@RequestParam(name = "pageNumber", required = false) Integer pageNumber,
                                  @RequestParam(name = "pageSize", required = false) Integer pageSize) {
 
@@ -105,6 +105,26 @@ public class FlightRestController {
 
     // Get all flights with departure date equals to today
     return flightService.findFlightsByDepartureDate(today, pageNumber, pageSize);
+  }
+
+  // Endpoint to get all flights for today
+  @GetMapping(value = FLIGHT_PATH)
+  public Page<Flight> getFlightsStartingByCurrentDate(@RequestParam(name = "pageNumber", required = false) Integer pageNumber,
+                                 @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+
+    // Get the current date
+    LocalDate today = LocalDate.now();
+
+    if(pageNumber == null) {
+      pageNumber = 0;
+    }
+
+    if(pageSize == null) {
+      pageSize = 25;
+    }
+
+    // Get all flights with departure date equals to today
+    return flightService.findFlightsFromDepartureDate(today, pageNumber, pageSize);
   }
 
   // Endpoint to get a flight by ID
