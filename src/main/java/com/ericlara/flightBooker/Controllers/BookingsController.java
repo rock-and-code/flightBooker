@@ -26,6 +26,7 @@ import com.ericlara.flightBooker.Services.FlightBookService;
 import com.ericlara.flightBooker.Services.FlightService;
 import com.ericlara.flightBooker.Services.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
@@ -69,8 +70,14 @@ public class BookingsController {
             return "redirect:/?flightNotFound";
         }
 
+        // Check if there are any unread bookings details to display badge notification
+        Integer unread_bookings_notification = (Integer) session.getAttribute("unread_bookings_details");
+
         // Create a new BookingDto object and add it to the model
         model.addAttribute("bookingDTO", new BookingDto());
+
+        // Get all unread bookings details and add them to the model
+        model.addAttribute("unreadBookings", unread_bookings_notification);
 
         // Return the view name for the checkout form
         return "bookings/bookingCheckoutForm";
@@ -80,7 +87,7 @@ public class BookingsController {
     @PostMapping
     public String bookFlight(@ModelAttribute BookingDto bookingDto,
             @PathVariable(name = "id", required = false) Long id, HttpServletResponse response,
-            Model model) {
+            HttpServletRequest request, Model model) {
         // Get the current date and time
         LocalDate today = LocalDate.now();
 
@@ -91,17 +98,32 @@ public class BookingsController {
         int passengers = bookingDto.getPassengers();
 
         try {
-             // Try to find the flight from the database
+            // Try to find the flight from the database
             Flight flightToBook = flightService.findFlightById(id);
 
             // Create a new FlightBook object for each passenger
             for (int i = 0; i < passengers; ++i) {
                 FlightBook flightBooking = new FlightBook(UUID.randomUUID(), today, currentUser, flightToBook);
                 flightBookService.save(flightBooking);
-                
-                //Decrements availables seats since we are booking a seat
-                flightToBook.decrementAvailableSeats(); 
-    
+
+                // Decrements availables seats since we are booking a seat
+                flightToBook.decrementAvailableSeats();
+
+            }
+
+            // Check if there are any unread bookings details to display badge notification
+            HttpSession session = request.getSession();
+            Integer unread_bookings_notification = (Integer) session.getAttribute("unread_bookings_details");
+
+            if (unread_bookings_notification != null) {
+                // Increments the number of unread flight bookings since user is booking more
+                unread_bookings_notification += passengers;
+                session.setAttribute("unread_bookings_details", unread_bookings_notification);
+            } else {
+                // Saving the number of bookings to the user to display the qty
+                // of unread bookings details as a badge notification on the user account
+                // dropdown menu
+                request.getSession().setAttribute("unread_bookings_details", passengers);
             }
 
             // Redirect to the flights page with a success message

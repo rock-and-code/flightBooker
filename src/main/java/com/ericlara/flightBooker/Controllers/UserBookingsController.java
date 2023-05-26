@@ -17,7 +17,9 @@ import com.ericlara.flightBooker.Models.UserEntity;
 import com.ericlara.flightBooker.Services.FlightBookService;
 import com.ericlara.flightBooker.Services.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping(value = "/bookings/user")
@@ -35,9 +37,19 @@ public class UserBookingsController {
 
     // METHOD TO DISPLAY USER'S BOOKINGS
     @PostMapping
-    public String getUserBookings(HttpServletResponse response, Model model) {
+    public String getUserBookings(HttpServletRequest request, Model model) {
         // Get the logged-in user's email and add it to the model
         UserEntity currentUser = getLoggedInUserInfo();
+
+        // Check if there are any unread bookings details to display badge notification
+        HttpSession session = request.getSession();
+        Integer unread_bookings_notification = (Integer) session.getAttribute("unread_bookings_details");
+
+        // Clearing unread bookings badge notification since the user is requesting to
+        // view the bookings details
+        if (unread_bookings_notification != null) {
+            session.removeAttribute("unread_bookings_details");
+        }
 
         model.addAttribute("userEmail", currentUser.getEmail());
 
@@ -50,13 +62,14 @@ public class UserBookingsController {
 
     // METHOD TO CANCEL ONE USER'S BOOKING AT A TIME
     @PostMapping(value = "{flightBookingId}")
-    public String deleteUserBooking(@PathVariable("flightBookingId") Long id, HttpServletResponse response, Model model) {
+    public String deleteUserBooking(@PathVariable("flightBookingId") Long id, HttpServletResponse response,
+            Model model) {
         // Get the flight booking to delete
         Optional<FlightBook> flightBookToDelete = flightBookService.findById(id);
 
         // Delete the flight booking
         if (flightBookToDelete.isPresent()) {
-            //Increment the flight's available seats since we are cancelling a booking
+            // Increment the flight's available seats since we are cancelling a booking
             flightBookToDelete.get().getFlight().incrementAvailableSeats();
             flightBookService.delete(flightBookToDelete.get());
         }
@@ -74,9 +87,9 @@ public class UserBookingsController {
     }
 
     // METHOD TO GET AUTHENTICATED USER INFO
-    // THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND 
+    // THIS HELPER METHOD IS USED TO ASSIGN BOOKINGS TO CORRESPONDING USERS AND
     // TO DETERMINE WHETHER TO DISPLAY LOG IN OR LOG OUT BUTTONS,
-    // AND TO DISPLAY THE USERS'S BOOKINGS 
+    // AND TO DISPLAY THE USERS'S BOOKINGS
     private UserEntity getLoggedInUserInfo() {
         // Get the authentication object from the SecurityContextHolder
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
@@ -93,4 +106,3 @@ public class UserBookingsController {
         return userService.findUserByEmail(userName);
     }
 }
-

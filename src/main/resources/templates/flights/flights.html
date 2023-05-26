@@ -33,21 +33,35 @@
                         <a class="nav-link" href="/">Search</a>
                     </li>
                 </ul>
-                 <!-- USER PROFILE NAVIGATION ELEMENT TO DISPLAY USER'S BOOKED FLIGHT -->
+                <!-- USER PROFILE NAVIGATION ELEMENT TO DISPLAY USER'S BOOKED FLIGHT -->
                 <!-- CHECK IF USER HAS BEEN AUTHENTICATED TO DISPLAY LOGIN OR LOGOUT BUTTON -->
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0 dropdown" th:if="${userEmail != null}">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png" alt="mdo" width="32" height="32"
-                                class="rounded-circle">
+                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
+                                alt="mdo" width="32" height="32" class="rounded-circle">
+                            <!-- DISPLAY BADGES NOTIFICATIONS IF THE USER HAVEN'T VIEWED THE BOOKINGS DETAILS AFTER BOOKING THEM-->
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                th:if="${unreadBookings != null}" th:text="${unreadBookings}">
+                                <span class="visually-hidden">unread bookings</span>
+                            </span>
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
                             <li class="dropdown-item" th:text="${userEmail}"></li>
                             <hr class="dropdown-divider">
-                            <li><form th:action="@{/bookings/user}" method="post">
-                                <button type="submit" class="dropdown-item">Bookings</button>
-                            </form></li>
+                            <li>
+                                <form th:action="@{/bookings/user}" method="post">
+                                    <!-- DISPLAY BADGES NOTIFICATIONS IF THE USER HAVEN'T VIEWED THE BOOKINGS DETAILS AFTER BOOKING THEM-->
+                                    <button type="submit" class="dropdown-item">Bookings
+                                        <span class="badge rounded-pill bg-danger" th:if="${unreadBookings != null}"
+                                            th:text="${unreadBookings}">
+                                            <span class="visually-hidden">unread bookings</span>
+                                        </span>
+                                    </button>
+                                </form>
+                            </li>
                             </li>
                             <li class="nav-item">
                                 <form th:action="@{/logout}" method="post">
@@ -61,8 +75,8 @@
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <!-- IMAGE OF A PROFILE ICON -->
-                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png" alt="mdo" width="32" height="32"
-                                class="rounded-circle">
+                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
+                                alt="mdo" width="32" height="32" class="rounded-circle">
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
                             <li class="nav-item">
@@ -78,9 +92,9 @@
                             </li>
                         </ul>
                     </div>
-                <!-- END IF -->
+                    <!-- END IF -->
+                </div>
             </div>
-        </div>
     </nav>
     <!-- END NAV BAR -->
 

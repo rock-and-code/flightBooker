@@ -41,13 +41,27 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
                                 alt="mdo" width="32" height="32" class="rounded-circle">
+                            <!-- DISPLAY BADGES NOTIFICATIONS IF THE USER HAVEN'T VIEWED THE BOOKINGS DETAILS AFTER BOOKING THEM-->
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                th:if="${unreadBookings != null}" th:text="${unreadBookings}">
+                                <span class="visually-hidden">unread bookings</span>
+                            </span>
                         </a>
                         <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
                             <li class="dropdown-item" th:text="${userEmail}"></li>
                             <hr class="dropdown-divider">
-                            <li><form th:action="@{/bookings/user}" method="post">
-                                <button type="submit" class="dropdown-item">Bookings</button>
-                            </form></li>
+                            <li>
+                                <form th:action="@{/bookings/user}" method="post">
+                                    <!-- DISPLAY BADGES NOTIFICATIONS IF THE USER HAVEN'T VIEWED THE BOOKINGS DETAILS AFTER BOOKING THEM-->
+                                    <button type="submit" class="dropdown-item">Bookings
+                                        <span class="badge rounded-pill bg-danger" th:if="${unreadBookings != null}"
+                                            th:text="${unreadBookings}">
+                                            <span class="visually-hidden">unread bookings</span>
+                                        </span>
+                                    </button>
+                                </form>
+                            </li>
                             </li>
                             <li class="nav-item">
                                 <form th:action="@{/logout}" method="post">
@@ -107,40 +121,41 @@
                         </div>
 
                         <!-- CARDS WITH BOOKING SUBTOTAL INFO -->
-                <div id="header">
-                    <h1 class="mb-3">Details</h1>
-                </div>
-                <div class="card my-3 shadow">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card-body">
-                                <div class="d-md-flex justify-content-between">
-                                    <h5 class="card-title" th:text="|From: ${flight.origin}|"></h5>
-                                    <h5 class="card-title" th:text="|To: ${flight.destination}|"></h5>
-                                </div>
-                                <div class="d-md-flex justify-content-between">
-                                    <p class="card-text"><small class="text-muted"
-                                        th:text="|Price per seat: |"></small><span class="text-dark-emphasis"
-                                        th:text="${flight.formattedPrice}"></span></p>
-                                </div>
-                                <div class="d-md-flex justify-content-between">
-                                    <h5 class="card-title" th:text="|Subtotal: |" id="subtotalLabel"></h5>
-                                    <h5 class="card-title" th:text="${flight.price}" id="subtotal"></h5>
-                                </div>
-                                <div class="d-md-flex justify-content-between">
-                                    <h5 class="card-title" th:text="|Tax (estimated): |" id="taxLabel"></h5>
-                                    <h5 class="card-title" th:text="${flight.price * 0.10}|" id="tax"></h5>
-                                </div>
-                                <div class="d-md-flex justify-content-between">
-                                    <h5 class="card-title" th:text="|Total: |" id="totalLabel">
-                                    </h5>
-                                    <h5 class="card-title" th:text="${flight.price * 1.10}" id="total">
-                                    </h5>
+                        <div id="header">
+                            <h1 class="mb-3">Details</h1>
+                        </div>
+                        <div class="card my-3 shadow">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card-body">
+                                        <div class="d-md-flex justify-content-between">
+                                            <h5 class="card-title" th:text="|From: ${flight.origin}|"></h5>
+                                            <h5 class="card-title" th:text="|To: ${flight.destination}|"></h5>
+                                        </div>
+                                        <div class="d-md-flex justify-content-between">
+                                            <p class="card-text"><small class="text-muted"
+                                                    th:text="|Price per seat: |"></small><span
+                                                    class="text-dark-emphasis"
+                                                    th:text="${flight.formattedPrice}"></span></p>
+                                        </div>
+                                        <div class="d-md-flex justify-content-between">
+                                            <h5 class="card-title" th:text="|Subtotal: |" id="subtotalLabel"></h5>
+                                            <h5 class="card-title" th:text="${flight.price}" id="subtotal"></h5>
+                                        </div>
+                                        <div class="d-md-flex justify-content-between">
+                                            <h5 class="card-title" th:text="|Tax (estimated): |" id="taxLabel"></h5>
+                                            <h5 class="card-title" th:text="${flight.price * 0.10}|" id="tax"></h5>
+                                        </div>
+                                        <div class="d-md-flex justify-content-between">
+                                            <h5 class="card-title" th:text="|Total: |" id="totalLabel">
+                                            </h5>
+                                            <h5 class="card-title" th:text="${flight.price * 1.10}" id="total">
+                                            </h5>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
                         <!-- BOOKING FORM BUTTON -->
                         <div class="col-12">
@@ -152,7 +167,7 @@
                 </div>
             </div>
             <div class="container gap-2 col-8 my-3" id="bookingSubtotal">
-                
+
             </div>
         </div>
     </div>

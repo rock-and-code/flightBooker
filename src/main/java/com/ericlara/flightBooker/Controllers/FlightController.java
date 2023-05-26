@@ -55,7 +55,8 @@ public class FlightController {
         // cookie.setPath("/");
         // response.addCookie(cookie);
 
-        // Check if flightDetails url has been saved to redirect user that have registered
+        // Check if flightDetails url has been saved to redirect user that have
+        // registered
         // to book a flight
         HttpSession session = request.getSession();
         String redirectUrl = (String) session.getAttribute("url_prior_login");
@@ -64,6 +65,10 @@ public class FlightController {
             session.removeAttribute("url_prior_login");
             return "redirect:" + redirectUrl;
         }
+
+        // Check if there are any unread bookings details to display badge notification
+        Integer unread_bookings_notification = (Integer) session.getAttribute("unread_bookings_details");
+
         // Get the current date
         LocalDate today = LocalDate.now();
 
@@ -79,6 +84,9 @@ public class FlightController {
         // Get all airports and add them to the model
         model.addAttribute("airports", airportService.findAllSortedASC());
 
+        // Get all unread bookings details and add them to the model
+        model.addAttribute("unreadBookings", unread_bookings_notification);
+
         // Return the "flights/flightSearchForm" view
         return "flights/flightSearchForm";
     }
@@ -88,11 +96,15 @@ public class FlightController {
     public String getAllFlights(@RequestParam(name = "origin") String origin,
             @RequestParam(name = "destination") String destination,
             @RequestParam(name = "departureDate") String departureDate,
-            HttpSession session, Model model) {
+            HttpServletRequest request, Model model) {
 
         if (origin.isBlank() || destination.isBlank() || departureDate.isBlank()) {
             return "redirect:/";
         }
+
+        // Check if there are any unread bookings details to display badge notification
+        HttpSession session = request.getSession();
+        Integer unread_bookings_notification = (Integer) session.getAttribute("unread_bookings_details");
 
         // To limit the date picker from today to its max date (12/31/2120) source:
         // https://stackoverflow.com/questions/47763292/thymeleaf-html5-datepicker-setting-min-date-from-variable-not-working
@@ -108,13 +120,21 @@ public class FlightController {
         model.addAttribute("flights", flightService
                 .findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin, destination, today, 1));
 
+        // Get all unread bookings details and add them to the model
+        model.addAttribute("unreadBookings", unread_bookings_notification);
+
         // Return the "flights/flights" view
         return "flights/flights";
     }
 
     // Handle flight search form submission
     @PostMapping(value = "flights")
-    public String searchResults(@ModelAttribute FlightDto flightDto, Model model) {
+    public String searchResults(@ModelAttribute FlightDto flightDto, Model model, HttpServletRequest request) {
+
+         // Check if there are any unread bookings details to display badge notification
+         HttpSession session = request.getSession();
+         Integer unread_bookings_notification = (Integer) session.getAttribute("unread_bookings_details");
+
         // Make a query using flightSearchQuery data
         String origin = flightDto.getOrigin();
         String destination = flightDto.getDestination();
@@ -128,6 +148,8 @@ public class FlightController {
         model.addAttribute("flights",
                 flightService.findFlightByOriginDestinationAndDepartureDateAndSeatsAvailable(origin,
                         destination, departureDate, passengers));
+         // Get all unread bookings details and add them to the model
+         model.addAttribute("unreadBookings", unread_bookings_notification);
 
         return "flights/flights";
     }
@@ -135,11 +157,17 @@ public class FlightController {
     // Retrieve flight details by ID and display them
     @GetMapping(value = "flights/{id}")
     public String getFlightDetails(@PathVariable(name = "id", required = false) Long id,
-            HttpServletRequest request, HttpSession session, Model model) {
+            HttpServletRequest request, Model model) {
         try {
+            // Check if there are any unread bookings details to display badge notification
+            HttpSession session = request.getSession();
+            Integer unread_bookings_notification = (Integer) session.getAttribute("unread_bookings_details");
+
             // Add the found flight to the model
             model.addAttribute("flight", flightService.findFlightById(id));
             model.addAttribute("userEmail", getLoggInUserEmail());
+            // Get all unread bookings details and add them to the model
+            model.addAttribute("unreadBookings", unread_bookings_notification);
             // Saving the fligh url in case user has to be redirected after login if the
             // user is
             // not authenticated

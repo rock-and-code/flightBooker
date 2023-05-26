@@ -10,7 +10,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity(name = "FLIGHT_BOOK")
 @Table(name = "FLIGHT_BOOK")
 public class FlightBook {
@@ -33,46 +39,11 @@ public class FlightBook {
     //@JoinColumn(name = "FLIGHT_ID")
     private Flight flight;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public FlightBook() {}
-
     public FlightBook(UUID bookingNumber, LocalDate bookedDate, UserEntity user, Flight flight) {
         this.bookingNumber = bookingNumber;
         this.bookedDate = bookedDate;
         this.user = user;
         this.flight = flight;
     }
-
-    public UUID getBookingNumber() {
-        return bookingNumber;
-    }
-    public void setBookingNumber(UUID bookNumber) {
-        this.bookingNumber = bookNumber;
-    }
-    
-    public LocalDate getBookedDate() {
-        return bookedDate;
-    }
-    public void setBookedDate(LocalDate bookedDate) {
-        this.bookedDate = bookedDate;
-    }
-
-    public UserEntity getUser() {
-        return user;
-    }
-    public void setUser(UserEntity user) {
-        this.user = user;
-    }
-    public Flight getFlight() {
-        return flight;
-    }
-    public void setFlight(Flight flight) {
-        this.flight = flight;
-    }
-
 
 }

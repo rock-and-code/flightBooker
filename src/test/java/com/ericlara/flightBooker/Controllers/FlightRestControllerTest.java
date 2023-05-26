@@ -82,7 +82,7 @@ public class FlightRestControllerTest {
     flights = new ArrayList<>();
     //objectMapper.findAndRegisterModules();
 
-    Flight newFlight = new Flight.Builder()
+    Flight newFlight = Flight.builder()
         .departureDate(LocalDate.now())
         .departureTime(LocalTime.now())
         .origin("San Juan, PR (SJR)")
@@ -93,7 +93,7 @@ public class FlightRestControllerTest {
         .build();
     flights.add(newFlight);
 
-    Flight newFlight2 = new Flight.Builder()
+    Flight newFlight2 = Flight.builder()
         .departureDate(LocalDate.now())
         .departureTime(LocalTime.now())
         .origin("San Juan, PR (SJR)")

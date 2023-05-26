@@ -108,7 +108,7 @@ public class BootstrapData implements CommandLineRunner {
             double price = random.nextDouble(80.00, 450.00);
 
             //Creating and saving flight in the DBA
-            Flight flight = new Flight.Builder()
+            Flight flight = Flight.builder()
                 .departureDate(departureDate)
                 .departureTime(departureTime)
                 .origin(airports.get(origin).getFormattedLocation())
