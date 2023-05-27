@@ -46,7 +46,7 @@ public class BootstrapData implements CommandLineRunner {
         UserEntity user = new UserEntity("userFirstName", "userLastName", "user@email.com", passwordEncoder.encode("password"), List.of(new Role("USER")), new HashSet<>());
         //SAVES USER TO THE MEMORY DBA
         userRepository.save(user);
-        //DISPLAY CREDENTIALS IN THE CONSOLE SO USER CAN TEST THE APP, OTHERWISE THE CAN CREATE AN ACCOUNT
+        //DISPLAY CREDENTIALS IN THE CONSOLE SO USER CAN TEST THE APP, OTHERWISE USER CAN CREATE AN ACCOUNT
         System.out.println("USE THE FOLLOWING CREDENTIALS TO LOG IN: email: user@email.com, password: password");
         //GENERATES RANDOM DUMMY DATA FOR ILLUSTRATION PURPOSES. DATA IS CREATED ON A MEMORY DBA
         int RANDOM_AIRPORTS_SAMPLE =  80;
