@@ -4,6 +4,7 @@ package com.ericlara.flightBooker.bootstrap;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +21,9 @@ import com.ericlara.flightBooker.Models.Role;
 import com.ericlara.flightBooker.Models.UserEntity;
 import com.ericlara.flightBooker.Repositories.AirportRepository;
 import com.ericlara.flightBooker.Repositories.FlightRepository;
+import com.ericlara.flightBooker.Repositories.RoleRepository;
 import com.ericlara.flightBooker.Repositories.UserRepository;
+import com.ericlara.flightBooker.util.TbConstants;
 
 /**
  * Class to create airports, flights, and save them to display WEB APP flight's search functionality.
@@ -39,11 +42,23 @@ public class BootstrapData implements CommandLineRunner {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public void run(String... args) throws Exception {
+         // Create a new Role object (ROLE_USER)
+        Role role = new Role(TbConstants.Roles.USER);
+        // Save role ROLE_USE in the dba
+        roleRepository.save(role);
+    
         //CREATES A USER FOR DEMOSTRATION PURPOSES ONLY, THE APP ALLOWS NEW USERS TO BE REGISTERED
-        UserEntity user = new UserEntity("userFirstName", "userLastName", "user@email.com", passwordEncoder.encode("password"), List.of(new Role("USER")), new HashSet<>());
+        UserEntity user = new UserEntity("userFirstName", 
+            "userLastName", 
+            "user@email.com",
+            passwordEncoder.encode("password"),
+            Arrays.asList(roleRepository.findByName(TbConstants.Roles.USER)), 
+            new HashSet<>());
         //SAVES USER TO THE MEMORY DBA
         userRepository.save(user);
         //DISPLAY CREDENTIALS IN THE CONSOLE SO USER CAN TEST THE APP, OTHERWISE USER CAN CREATE AN ACCOUNT
@@ -102,8 +117,8 @@ public class BootstrapData implements CommandLineRunner {
             Character firstCharacter = (char) ('A' + (random.nextInt(26)));
             Character secondCharacter = (char) ('A' + (random.nextInt(26)));
             String flightNumber = String.valueOf(firstCharacter) + String.valueOf(secondCharacter) 
-                + String.valueOf((year + month + day)%100) + String.valueOf(originAirportId) 
-                + String.valueOf(destinationAirportId);
+                + String.valueOf((year + month + day)%100) + String.valueOf(originAirportId.charAt(0)) 
+                + String.valueOf(destinationAirportId.charAt(0));
 
             double price = random.nextDouble(80.00, 450.00);
 

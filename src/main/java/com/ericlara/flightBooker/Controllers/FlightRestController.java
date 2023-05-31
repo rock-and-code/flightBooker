@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,7 @@ public class FlightRestController {
   }
 
   // Endpoint to update a flight by ID
-  @PutMapping(value = FLIGHT_PATH_ID)
+  @PutMapping(value = FLIGHT_PATH_ID, produces =  MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Flight> updateFlightById(@PathVariable("flightId") Long id, 
                                                  @RequestBody Flight flight) {
 
@@ -59,7 +60,7 @@ public class FlightRestController {
   }
 
   // Endpoint to partially update a flight by ID
-  @PatchMapping(value = FLIGHT_PATH_ID)
+  @PatchMapping(value = FLIGHT_PATH_ID, produces =  MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Flight> patchFlightById(@PathVariable("flightId") Long id, 
                                                 @RequestBody Flight flight) {
 
@@ -73,7 +74,7 @@ public class FlightRestController {
   }
 
   // Endpoint to save a flight
-  @PostMapping(value = FLIGHT_PATH)
+  @PostMapping(value = FLIGHT_PATH, produces =  MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Flight> saveFlight(@RequestBody Flight flight) {
 
     // Save the flight
@@ -88,7 +89,7 @@ public class FlightRestController {
   }
 
   // Endpoint to get all flights for today
-  @GetMapping(value = FLIGHT_PATH + "/today")
+  @GetMapping(value = FLIGHT_PATH + "/today", produces =  MediaType.APPLICATION_JSON_VALUE)
   public Page<Flight> getFlights(@RequestParam(name = "pageNumber", required = false) Integer pageNumber,
                                  @RequestParam(name = "pageSize", required = false) Integer pageSize) {
 
@@ -108,7 +109,7 @@ public class FlightRestController {
   }
 
   // Endpoint to get all flights for today
-  @GetMapping(value = FLIGHT_PATH)
+  @GetMapping(value = FLIGHT_PATH, produces =  MediaType.APPLICATION_JSON_VALUE)
   public Page<Flight> getFlightsStartingByCurrentDate(@RequestParam(name = "pageNumber", required = false) Integer pageNumber,
                                  @RequestParam(name = "pageSize", required = false) Integer pageSize) {
 
@@ -128,7 +129,7 @@ public class FlightRestController {
   }
 
   // Endpoint to get a flight by ID
-  @GetMapping(value = FLIGHT_PATH_ID)
+  @GetMapping(value = FLIGHT_PATH_ID, produces =  MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Flight> getFlightById(@PathVariable("flightId") Long id) {
 
     // Try to find the flight by ID
@@ -141,7 +142,7 @@ public class FlightRestController {
   }
 
   // Endpoint to delete a flight by ID
-  @DeleteMapping(value = FLIGHT_PATH_ID)
+  @DeleteMapping(value = FLIGHT_PATH_ID, produces =  MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<Flight> deleteflightById(@PathVariable("flightId") Long id) {
 
     // Try to find and delete the flight by ID

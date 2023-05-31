@@ -8,16 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ericlara.flightBooker.Mappers.UserMapper;
 import com.ericlara.flightBooker.Models.Role;
 import com.ericlara.flightBooker.Models.UserAlreadyExistsException;
-import com.ericlara.flightBooker.Models.UserDto;
 import com.ericlara.flightBooker.Models.UserEntity;
+import com.ericlara.flightBooker.Models.UserNotFoundException;
+import com.ericlara.flightBooker.Models.UserXML;
 import com.ericlara.flightBooker.Repositories.RoleRepository;
 import com.ericlara.flightBooker.Repositories.UserRepository;
 import com.ericlara.flightBooker.util.TbConstants;
 
-@Service("userService")
-public class UserServiceImpl implements UserService {
+@Service("userXMLService")
+public class UserXMLServiceImpl implements UserXMLService {
 
     // Inject the UserRepository
     @Autowired
@@ -31,24 +33,29 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private UserMapper userMapper;
+
     // Implement the register method
     @Override
-    public void register(UserDto userDto) throws UserAlreadyExistsException {
+    public void register(UserXML userXML) throws UserAlreadyExistsException {
 
         // Check if the user already exists
-        if (checkIfUserExists(userDto.getEmail())) {
+        if (checkIfUserExists(userXML.getEmail())) {
             throw new UserAlreadyExistsException("User already exists for this email");
         }
 
-        // Get user role to assign it to the new user
-        Role role = roleRepository.findByName(TbConstants.Roles.USER);
+       // Create a new Role object
+       Role role = roleRepository.findByName(TbConstants.Roles.USER);
+
+    //    System.out.println(role.getName());
 
         // Create a new UserEntity object
         UserEntity user = new UserEntity(
-                userDto.getFirstName(),
-                userDto.getLastName(),
-                userDto.getEmail(),
-                passwordEncoder.encode(userDto.getPassword()),
+                userXML.getFirstName(),
+                userXML.getLastName(),
+                userXML.getEmail(),
+                passwordEncoder.encode(userXML.getPassword()),
                 Arrays.asList(role),
                 new HashSet<>()
         );
@@ -60,19 +67,32 @@ public class UserServiceImpl implements UserService {
 
     // Implement the findUserByEmail method
     @Override
-    public UserEntity findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public UserXML findUserByEmail(String email) {
+        UserEntity userEntity = userRepository.findByEmail(email);
+        return userMapper.userEntityToUserXML(userEntity);
     }
 
     @Override
-    public List<UserEntity> findAllUsers() {
-        return userRepository.findAllUsers();
+    public UserXML findUserById(Long id) throws UserNotFoundException {
+
+        if (!userRepository.findById(id).isPresent()) {
+            throw new UserNotFoundException();
+        } else {
+            UserEntity userEntity = userRepository.findById(id).get();
+            return userMapper.userEntityToUserXML(userEntity);
+        }
     }
 
     // Implement the checkIfUserExists method
     @Override
     public boolean checkIfUserExists(String email) {
         return userRepository.findByEmail(email) != null;
+    }
+
+    @Override
+    public List<UserXML> findAllUsers() {
+        List<UserEntity> userEntityList = userRepository.findAllUsers();
+        return userMapper.userEntityListToUserXMLList(userEntityList);
     }
 
 }
