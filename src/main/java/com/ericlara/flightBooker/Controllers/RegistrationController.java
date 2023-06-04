@@ -1,10 +1,13 @@
 package com.ericlara.flightBooker.Controllers;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
@@ -14,9 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.ericlara.flightBooker.Mappers.UserMapper;
 import com.ericlara.flightBooker.Models.UserAlreadyExistsException;
 import com.ericlara.flightBooker.Models.UserDto;
-import com.ericlara.flightBooker.Services.UserServiceImpl;
+import com.ericlara.flightBooker.Models.UserXML;
+import com.ericlara.flightBooker.Services.UserService;
+import com.ericlara.flightBooker.Services.UserXMLService;
+import com.ericlara.flightBooker.util.UserXMLUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +33,16 @@ import jakarta.validation.Valid;
 public class RegistrationController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserMapper userMapper;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserXMLService userXMLService;
 
     @Autowired
     protected AuthenticationManager authenticationManager;
@@ -66,6 +82,17 @@ public class RegistrationController {
 
             // Redirect back to the registration form
             return "authentication/register";
+        }
+
+
+        try {
+            //Adding User to XML FILE
+            String encyptedPass = passwordEncoder.encode(userDto.getPassword());
+            userDto.setPassword(encyptedPass);
+            UserXML userXML = userMapper.userDTOToUserXML(userDto);
+            new UserXMLUtil(userXMLService).registerUser(userXML);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         // Auto-login the user after registration

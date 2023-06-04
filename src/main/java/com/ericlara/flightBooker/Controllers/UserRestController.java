@@ -1,5 +1,7 @@
 package com.ericlara.flightBooker.Controllers;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,7 @@ import com.ericlara.flightBooker.Models.UserXML;
 import com.ericlara.flightBooker.Models.UsersXML;
 import com.ericlara.flightBooker.Services.UserService;
 import com.ericlara.flightBooker.Services.UserXMLService;
+import com.ericlara.flightBooker.util.UserXMLUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -45,6 +49,9 @@ public class UserRestController {
   @Autowired
   protected AuthenticationManager authenticationManager;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
   // METHOD TO GET ALL REGISTER USER-> FOR DEMOSTRATOIN PURPOSES ONLY AS WE ARE
   // LEAKING TOO MUCH INFORMATION TO USERS
   @GetMapping(value = USER_PATH, produces = MediaType.APPLICATION_XML_VALUE)
@@ -63,6 +70,14 @@ public class UserRestController {
       userXMLService.register(user);
     } catch (UserAlreadyExistsException e) {
       return ResponseEntity.status(409).header("X-Status-Reason", e.getMessage()).build();
+    }
+
+    try {
+      String encryptedPass = passwordEncoder.encode(user.getPassword());
+      user.setPassword(encryptedPass);
+      new UserXMLUtil(userXMLService).registerUser(user);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
 
     // Get user

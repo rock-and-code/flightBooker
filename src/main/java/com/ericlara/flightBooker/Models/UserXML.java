@@ -2,6 +2,10 @@ package com.ericlara.flightBooker.Models;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import jakarta.validation.constraints.Email;
@@ -11,6 +15,8 @@ import lombok.Data;
 
 //@XmlRootElement(name = "user")
 @JacksonXmlRootElement(localName = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
 @Data
 public class UserXML  implements Serializable {
     @NotNull
