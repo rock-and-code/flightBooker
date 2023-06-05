@@ -1,6 +1,11 @@
 # Flight Booker App
 This is a web-based air travel booker app built with Bootstrap and Spring Boot. It allows users to search for and book flights, view flight details, and manage their bookings. The app is built with a responsive and modern UI using Bootstrap for the frontend, and Spring Boot for the backend to handle user authentication, flight data retrieval, and booking processing.
 
+# HTTPS
+The application enables HTTPS by using a self-signed certificate. If you have any problems with the self-signed certificate, you can generate a new one using the following command:
+
+<code>keytool -genkeypair -alias flightBooker -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore flightBooker.p12 -validity 3650</code>
+
 # Installation
 Clone the repository:
 

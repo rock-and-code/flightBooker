@@ -14,16 +14,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.ericlara.flightBooker.Mappers.UserMapper;
 import com.ericlara.flightBooker.Models.Airport;
 import com.ericlara.flightBooker.Models.AirportData;
 import com.ericlara.flightBooker.Models.Flight;
 import com.ericlara.flightBooker.Models.Role;
 import com.ericlara.flightBooker.Models.UserEntity;
+import com.ericlara.flightBooker.Models.UserXML;
 import com.ericlara.flightBooker.Repositories.AirportRepository;
 import com.ericlara.flightBooker.Repositories.FlightRepository;
 import com.ericlara.flightBooker.Repositories.RoleRepository;
 import com.ericlara.flightBooker.Repositories.UserRepository;
 import com.ericlara.flightBooker.util.TbConstants;
+import com.ericlara.flightBooker.util.UserXMLUtil;
 
 /**
  * Class to create airports, flights, and save them to display WEB APP flight's search functionality.
@@ -44,6 +47,8 @@ public class BootstrapData implements CommandLineRunner {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private UserMapper mapper;
 
     @Override
     public void run(String... args) throws Exception {
@@ -59,6 +64,10 @@ public class BootstrapData implements CommandLineRunner {
             passwordEncoder.encode("password"),
             Arrays.asList(roleRepository.findByName(TbConstants.Roles.USER)), 
             new HashSet<>());
+
+        UserXML UserXML = mapper.userEntityToUserXML(user);
+        //SAVES USER DETAILS IN A XML FILE    
+        UserXMLUtil.registerUser(UserXML);
         //SAVES USER TO THE MEMORY DBA
         userRepository.save(user);
         //DISPLAY CREDENTIALS IN THE CONSOLE SO USER CAN TEST THE APP, OTHERWISE USER CAN CREATE AN ACCOUNT

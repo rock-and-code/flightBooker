@@ -75,7 +75,7 @@ public class UserRestController {
     try {
       String encryptedPass = passwordEncoder.encode(user.getPassword());
       user.setPassword(encryptedPass);
-      new UserXMLUtil(userXMLService).registerUser(user);
+      UserXMLUtil.registerUser(user);
     } catch (IOException e) {
       e.printStackTrace();
     }

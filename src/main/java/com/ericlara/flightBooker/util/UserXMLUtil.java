@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -13,19 +14,13 @@ import javax.xml.bind.Unmarshaller;
 
 import com.ericlara.flightBooker.Models.UserXML;
 import com.ericlara.flightBooker.Models.UsersXML;
-import com.ericlara.flightBooker.Services.UserXMLService;
 
-import lombok.AllArgsConstructor;
-
-@AllArgsConstructor
 public class UserXMLUtil {
-    
-    private UserXMLService userXMLService;
-
+    private UserXMLUtil(){}
     /*
      * Method to read all the users from the users.xml file.
      */
-    public List<UserXML> readUsers() {
+    public static List<UserXML> readUsers() {
 
 
         UsersXML users = new UsersXML();
@@ -49,15 +44,16 @@ public class UserXMLUtil {
     /*
      * Method to write a new user to the users.xml file.
      */
-    public void registerUser(UserXML user) throws IOException {
+    public static void registerUser(UserXML user) throws IOException {
 
         try {
             List<UserXML> users = readUsers();
 
             if (users == null) {
-                users = userXMLService.findAllUsers();
+                users = new ArrayList<>();
+                users.add(user);
             } else {
-                users.add(0, user);
+                users.add(user);
             }
 
             JAXBContext context;
