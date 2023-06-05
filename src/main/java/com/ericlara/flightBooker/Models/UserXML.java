@@ -13,7 +13,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-//@XmlRootElement(name = "user")
 @JacksonXmlRootElement(localName = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
