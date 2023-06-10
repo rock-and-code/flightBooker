@@ -30,7 +30,7 @@ import com.ericlara.flightBooker.util.UserXMLUtil;
 
 /**
  * Class to create airports, flights, and save them to display WEB APP flight's search functionality.
- * Time complexity 0(XN)
+ * Time complexity 0(xN)
  * It is set up to generate ~80 airports and 3,000,000 flights to increase
  * the probabilities of displaying results at any search query. 
  */

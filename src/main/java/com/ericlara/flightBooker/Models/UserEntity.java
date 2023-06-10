@@ -55,10 +55,10 @@ public class UserEntity {
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user") //MAPPED BY PROPERTY NOT COLUMN NAME
-    private Set<FlightBook> flightbookings = new HashSet<>();
+    private Set<Booking> flightbookings = new HashSet<>();
 
     public UserEntity(String firstName, String lastName, String email, String password, List<Role> roles,
-            Set<FlightBook> flightbookings) {
+            Set<Booking> flightbookings) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

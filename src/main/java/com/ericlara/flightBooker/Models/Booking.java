@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,9 +19,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity(name = "FLIGHT_BOOK")
 @Table(name = "FLIGHT_BOOK")
-public class FlightBook {
+public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
@@ -39,7 +43,7 @@ public class FlightBook {
     //@JoinColumn(name = "FLIGHT_ID")
     private Flight flight;
 
-    public FlightBook(UUID bookingNumber, LocalDate bookedDate, UserEntity user, Flight flight) {
+    public Booking(UUID bookingNumber, LocalDate bookedDate, UserEntity user, Flight flight) {
         this.bookingNumber = bookingNumber;
         this.bookedDate = bookedDate;
         this.user = user;

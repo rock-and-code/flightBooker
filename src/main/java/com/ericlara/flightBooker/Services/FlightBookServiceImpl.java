@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ericlara.flightBooker.Models.FlightBook;
+import com.ericlara.flightBooker.Models.Booking;
 import com.ericlara.flightBooker.Models.UserEntity;
 import com.ericlara.flightBooker.Repositories.FlightBookRepository;
 @Service("flightBookService")
@@ -21,7 +21,7 @@ public class FlightBookServiceImpl implements FlightBookService {
      * @return An Optional containing the flight book, if it exists.
      */
     @Override
-    public Optional<FlightBook> findById(Long id) {
+    public Optional<Booking> findById(Long id) {
         // Finds the flight book with the given ID from the repository.
         return flightBookRepository.findById(id);
     }
@@ -32,7 +32,7 @@ public class FlightBookServiceImpl implements FlightBookService {
      * @param flightBook The flight book to save.
      */
     @Override
-    public void save(FlightBook flightBook) {
+    public void save(Booking flightBook) {
         // Saves the flight book to the repository.
         flightBookRepository.save(flightBook);
     }
@@ -44,7 +44,7 @@ public class FlightBookServiceImpl implements FlightBookService {
      * @return An iterable containing all flight books for the user.
      */
     @Override
-    public Iterable<FlightBook> findAllByUser(UserEntity user) {
+    public Iterable<Booking> findAllByUser(UserEntity user) {
         // Finds all flight books for the given user from the repository.
         return flightBookRepository.findAllByUser(user);
     }
@@ -55,7 +55,7 @@ public class FlightBookServiceImpl implements FlightBookService {
      * @param flightBook The flight book to delete.
      */
     @Override
-    public void delete(FlightBook flightBook) {
+    public void delete(Booking flightBook) {
         // Deletes the flight book from the repository.
         flightBookRepository.delete(flightBook);
     }

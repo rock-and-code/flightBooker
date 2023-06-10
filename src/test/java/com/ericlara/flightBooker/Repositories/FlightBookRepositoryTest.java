@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import com.ericlara.flightBooker.Models.Booking;
 import com.ericlara.flightBooker.Models.Flight;
-import com.ericlara.flightBooker.Models.FlightBook;
 import com.ericlara.flightBooker.Models.UserEntity;
 @DataJpaTest
 public class FlightBookRepositoryTest {
@@ -26,7 +26,7 @@ public class FlightBookRepositoryTest {
 
     private UserEntity testUserEntity;
     private Flight testFlight;
-    private FlightBook testFlightBook;
+    private Booking testFlightBook;
     @BeforeEach
     void setUp() {
         UserEntity userEntity = new UserEntity("User", "UserLastName", "user@email.com", "password", null, null);
@@ -40,7 +40,7 @@ public class FlightBookRepositoryTest {
             .flightNumber("TX1256")
             .build();
         testFlight = flightRepository.save(flight);
-        FlightBook booking = new FlightBook(UUID.randomUUID(), LocalDate.now(), testUserEntity, testFlight);
+        Booking booking = new Booking(UUID.randomUUID(), LocalDate.now(), testUserEntity, testFlight);
         testFlightBook = flightBookRepository.save(booking);
     }
     @Test
@@ -55,7 +55,7 @@ public class FlightBookRepositoryTest {
 
     @Test
     void testFindAllByUser() {
-        List<FlightBook> bookings = flightBookRepository.findAllByUser(testUserEntity);
+        List<Booking> bookings = flightBookRepository.findAllByUser(testUserEntity);
         int result = bookings.size();
         int expResult = 1;
         assertEquals(expResult, result);

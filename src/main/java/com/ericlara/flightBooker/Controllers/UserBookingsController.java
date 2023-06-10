@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ericlara.flightBooker.Models.FlightBook;
+import com.ericlara.flightBooker.Models.Booking;
 import com.ericlara.flightBooker.Models.UserEntity;
 import com.ericlara.flightBooker.Services.FlightBookService;
 import com.ericlara.flightBooker.Services.UserService;
@@ -65,7 +65,7 @@ public class UserBookingsController {
     public String deleteUserBooking(@PathVariable("flightBookingId") Long id, HttpServletResponse response,
             Model model) {
         // Get the flight booking to delete
-        Optional<FlightBook> flightBookToDelete = flightBookService.findById(id);
+        Optional<Booking> flightBookToDelete = flightBookService.findById(id);
 
         // Delete the flight booking
         if (flightBookToDelete.isPresent()) {

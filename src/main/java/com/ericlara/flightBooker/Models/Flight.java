@@ -66,7 +66,7 @@ public class Flight {
 
     @OneToMany(mappedBy = "flight")
     @Default
-    private Set<FlightBook> bookings = new HashSet<>();
+    private Set<Booking> bookings = new HashSet<>();
     
 
     // Returns formatted departure time using a 12-hour clock pattern

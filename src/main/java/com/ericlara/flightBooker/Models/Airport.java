@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +22,8 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "AIRPORT")
 @Entity(name = "AIRPORT")
 public class Airport {
@@ -33,12 +37,12 @@ public class Airport {
     private String city;
     @Column(name = "STATE")
     private String state;
-    @Column(name = "LOCATION_ID")
-    private String locationId;
+    @Column(name = "IATA_ID")
+    private String iataId;
 
     //Returns a formatted location string with the city, state, and location ID
     public String getFormattedLocation() {
-        return this.city + ", " + this.state + " (" + this.locationId + ")";
+        return this.city + ", " + this.state + " (" + this.iataId + ")";
     }
 
     //Custome Builder pattern for creating an Airport object
@@ -58,7 +62,7 @@ public class Airport {
     }
 
     public Airport locationId(String locationId) {
-        this.locationId = locationId;
+        this.iataId = locationId;
         return this;
     }
 

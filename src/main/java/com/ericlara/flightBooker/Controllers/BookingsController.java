@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ericlara.flightBooker.Models.Booking;
 import com.ericlara.flightBooker.Models.BookingDto;
 import com.ericlara.flightBooker.Models.Flight;
-import com.ericlara.flightBooker.Models.FlightBook;
 import com.ericlara.flightBooker.Models.FlightNotFoundException;
 import com.ericlara.flightBooker.Models.UserEntity;
 import com.ericlara.flightBooker.Services.FlightBookService;
@@ -103,7 +103,7 @@ public class BookingsController {
 
             // Create a new FlightBook object for each passenger
             for (int i = 0; i < passengers; ++i) {
-                FlightBook flightBooking = new FlightBook(UUID.randomUUID(), today, currentUser, flightToBook);
+                Booking flightBooking = new Booking(UUID.randomUUID(), today, currentUser, flightToBook);
                 flightBookService.save(flightBooking);
 
                 // Decrements availables seats since we are booking a seat

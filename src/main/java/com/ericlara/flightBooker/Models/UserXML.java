@@ -11,12 +11,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @JacksonXmlRootElement(localName = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 @Data
+@AllArgsConstructor
 public class UserXML  implements Serializable {
     @NotNull
     @NotEmpty(message = "User's first name cannot be empty.")

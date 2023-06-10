@@ -2,7 +2,7 @@ package com.ericlara.flightBooker.Services;
 
 import java.util.Optional;
 
-import com.ericlara.flightBooker.Models.FlightBook;
+import com.ericlara.flightBooker.Models.Booking;
 import com.ericlara.flightBooker.Models.UserEntity;
 
 public interface FlightBookService {
@@ -13,14 +13,14 @@ public interface FlightBookService {
      * @param id The ID of the flight book to find.
      * @return An Optional containing the flight book, if it exists.
      */
-    public Optional<FlightBook> findById(Long id);
+    public Optional<Booking> findById(Long id);
 
     /**
      * Saves a flight book.
      *
      * @param flightBook The flight book to save.
      */
-    public void save(FlightBook flightBook);
+    public void save(Booking flightBook);
 
     /**
      * Finds all flight books for a given user.
@@ -28,12 +28,12 @@ public interface FlightBookService {
      * @param user The user to find flight books for.
      * @return An iterable containing all flight books for the user.
      */
-    public Iterable<FlightBook> findAllByUser(UserEntity user);
+    public Iterable<Booking> findAllByUser(UserEntity user);
 
     /**
      * Deletes a flight book.
      *
      * @param flightBook The flight book to delete.
      */
-    public void delete(FlightBook flightBook);
+    public void delete(Booking flightBook);
 }
