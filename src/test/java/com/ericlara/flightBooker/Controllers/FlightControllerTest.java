@@ -74,7 +74,7 @@ public class FlightControllerTest {
     @Test
     void testFlightsForm() throws Exception {
     
-
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(get("/")).andExpect(view().name("flights/flightSearchForm"))
                 .andDo(MockMvcResultHandlers.print());
         // This performs a GET request to the "/" URL. This request is expected to
@@ -84,40 +84,34 @@ public class FlightControllerTest {
 
     @Test
     void searchResultsTest() throws Exception {
-        // This method tests the FlightController.flightsForm() method.
-
+        // Set up the mock data.
         FlightDto flightDto = FlightDto.builder()
         .departureDate(LocalDate.of(2022, 05, 30))
         .destination(AirportData.usAirports.get(1).getFormattedLocation())
         .origin(AirportData.usAirports.get(0).getFormattedLocation())
         .numOfPassengers(3)
         .build();
-
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(post("/flights")
                 .flashAttr("flightDto", flightDto)
                 ).andExpect(view().name("flights/flights"))
                 .andDo(MockMvcResultHandlers.print());
-        // This performs a GET request to the "/" URL. This request is expected to
-        // return the "flights/flightSearchForm" view. The MockMvcResultHandlers.print()
-        // method is used to print the results of the request.
     }
 
     @Test
     void getSearchResultsTest() throws Exception {
-       
+       // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(get("/flights")
                 .param("origin", "origin")
                 .param("destination", "destination")
                 .param("departureDate", "2023-05-30")
                 ).andExpect(view().name("flights/flights"))
                 .andDo(MockMvcResultHandlers.print());
-        // This performs a GET request to the "/" URL. This request is expected to
-        // return the "flights/flightSearchForm" view. The MockMvcResultHandlers.print()
-        // method is used to print the results of the request.
     }
 
     @Test
     void testgetFlightDetails() throws Exception {
+        // Set up the mock data.
         Long flightId = 1L;
         Flight flight = Flight.builder()
         .id(flightId)
@@ -129,16 +123,14 @@ public class FlightControllerTest {
         .flightNumber("MX6789")
         .price(150.45)
         .build();
+        // Mock the service findFlightById metod call in the controller.
         BDDMockito.given(flightService.findFlightById(any(Long.class))).willReturn(flight);
         Mockito.when(flightService.findFlightById(flightId)).thenReturn(flight);
 
-        // this.mockMvc.
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(get("/flights/{flightId}", 1L))
                 .andExpect(view().name("flights/flightDetails"))
                 .andDo(MockMvcResultHandlers.print());
-        // This performs a GET request to the "/" URL. This request is expected to
-        // return the "flights/flightSearchForm" view. The MockMvcResultHandlers.print()
-        // method is used to print the results of the request.
     }
 
 }

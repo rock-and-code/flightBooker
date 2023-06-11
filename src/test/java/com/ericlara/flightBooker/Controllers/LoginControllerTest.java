@@ -11,9 +11,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-
-
-
 @WebMvcTest(LoginController.class)
 @AutoConfigureMockMvc(addFilters = false) // TO CIRCUMVENT SPRING SECURITY
 @ExtendWith(MockitoExtension.class)
@@ -22,6 +19,7 @@ public class LoginControllerTest {
     private MockMvc mockMvc;
     @Test
     void testLogin() throws Exception {
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(get("/login")).andExpect(view().name("authentication/login"))
                 .andDo(MockMvcResultHandlers.print());
     }

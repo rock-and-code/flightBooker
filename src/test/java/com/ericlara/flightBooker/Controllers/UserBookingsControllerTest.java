@@ -110,8 +110,8 @@ public class UserBookingsControllerTest {
     @Test
     @WithMockUser(username = "user@email.com", authorities = { "ROLE_USER" })
     void testDeleteUserBooking() throws Exception {
+        // Set up mock data
         Optional<Booking> booking = Optional.of(bookings.get(0));
-
         String userName = "user@email.com";
         Long bookingId = 1L;
         // To address custom authentication method in Booking controller
@@ -120,7 +120,7 @@ public class UserBookingsControllerTest {
 
         BDDMockito.given(flightBookService.findById(any(Long.class))).willReturn(booking);
         Mockito.when(flightBookService.findById(bookingId)).thenReturn(booking);
-
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(post("/bookings/user", 1L)
                 .with(csrf())).andExpect(view().name("bookings/userBookings"))
                 .andDo(MockMvcResultHandlers.print());
@@ -130,6 +130,7 @@ public class UserBookingsControllerTest {
     @Test
     @WithMockUser(username = "user@email.com", authorities = { "ROLE_USER" })
     void testGetUserBookings() throws Exception {
+        // Set up mock data
         String userName = "user@email.com";
         // To address custom authentication method in Booking controller
         BDDMockito.given(userService.findUserByEmail(any(String.class))).willReturn(user);
@@ -137,7 +138,7 @@ public class UserBookingsControllerTest {
 
         BDDMockito.given(flightBookService.findAllByUser(any(UserEntity.class))).willReturn(bookings);
         Mockito.when(flightBookService.findAllByUser(user)).thenReturn(bookings);
-
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(post("/bookings/user")
                 .with(csrf())).andExpect(view().name("bookings/userBookings"))
                 .andDo(MockMvcResultHandlers.print());

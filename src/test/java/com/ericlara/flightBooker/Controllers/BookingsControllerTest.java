@@ -98,17 +98,17 @@ public class BookingsControllerTest {
     @Test
     @WithMockUser(username = "user@email.com", authorities = { "ROLE_USER" })
     public void checkoutFormTest() throws Exception {
-
+        // Set up the mock data.
         String userName = "user@email.com";
         Long flightId = 1L;
         BDDMockito.given(flightService.findFlightById(any(Long.class))).willReturn(flight);
         Mockito.when(flightService.findFlightById(flightId)).thenReturn(flight);
 
-        //To address custom authentication method in Booking controller 
+        // Mock the authentication method in the Booking controller.
         BDDMockito.given(userService.findUserByEmail(any(String.class))).willReturn(user);
         Mockito.when(userService.findUserByEmail(userName)).thenReturn(user);
 
-        // this.mockMvc.
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(get("/bookings/flights/{id}", 1L))
                 .andExpect(view().name("bookings/bookingCheckoutForm"))
                 .andDo(MockMvcResultHandlers.print());
@@ -118,20 +118,19 @@ public class BookingsControllerTest {
     @WithMockUser(username = "user@email.com", authorities = { "ROLE_USER" })
     void testBookFlight() throws Exception {
     
-
+        // Set up the mock data.
         BookingDto bookingDto = new BookingDto();
         bookingDto.setPassengers(2);
-
         String userName = "user@email.com";
         Long flightId = 1L;
         BDDMockito.given(flightService.findFlightById(any(Long.class))).willReturn(flight);
         Mockito.when(flightService.findFlightById(flightId)).thenReturn(flight);
 
-        //To address custom authentication method in Booking controller 
+        // Mock the authentication method in the Booking controller.
         BDDMockito.given(userService.findUserByEmail(any(String.class))).willReturn(user);
         Mockito.when(userService.findUserByEmail(userName)).thenReturn(user);
 
-
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(post("/bookings/flights/{id}", 1L)
                 .flashAttr("bookingDto", bookingDto)
                 .with(csrf())

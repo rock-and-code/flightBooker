@@ -220,40 +220,6 @@ Response:
   <li><code>404 Not Found</code>: The user was not found.</li>
 </ul>
 
-### Authenticate user
-This endpoint authenticates a user and logs them in. The request body must contain the following properties:
-  
-Method: <code>POST</code>
-
-URL: <code>https://localshots:8443/api/v1/users/login</code>
-  
-<ul>
-  <li><code>firstName</code>: The user's first name.</li>
-  <li><code>lastName</code>: The user's last name.</li>
-  <li><code>email</code>: The user's email address.</li>
-  <li><code>password</code>: The user's password.</li>
-</ul>
-
-Example of the body XML:
-  
-```
-<user>
-    <email>user@email.com</email>
-    <password>password</password>
-</user>
-```
-  
-Method: <code>POST</code>
-
-URL: <code>https://localshots:8443/api/v1/users/login</code>
- 
-Response: 
-
-<ul>
-  <li><code>200 OK</code>: The request was successful.</li>
-  <li><code>404 Not Found</code>: The user was not found.</li>
-</ul>
-
 # Built With
 Bootstrap - Frontend framework
 Spring Boot - Backend framework

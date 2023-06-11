@@ -79,8 +79,8 @@ public class FlightRestControllerTest {
 
   @BeforeEach
   public void setUp() {
+    // Set up the mock data.
     flights = new ArrayList<>();
-    //objectMapper.findAndRegisterModules();
 
     Flight newFlight = Flight.builder()
         .departureDate(LocalDate.now())
@@ -107,26 +107,27 @@ public class FlightRestControllerTest {
 
   @Test
   void testDeleteflightById() throws Exception {
+    // Set up the mock data.
     Flight flight = flights.get(0);
     flight.setId(Long.valueOf(1));
     mockMvc.perform(delete(FlightRestController.FLIGHT_PATH_ID, flight.getId())
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent())
         .andDo(MockMvcResultHandlers.print());
-    //longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+    // Perform the request and assert that argumento captor is correct
     BDDMockito.verify(flightService).deleteFlightById(longArgumentCaptor.capture());
-
     assertEquals(flight.getId(), longArgumentCaptor.getValue());
   }
 
   @Test
   void testGetFlightById() throws Exception {
-
+    // Set up the mock data.
     Long flightId = new Random().nextLong(300);
     Flight flight = flights.get(0);
     BDDMockito.given(flightService.findFlightById(any(Long.class))).willReturn(flight);
     Mockito.when(flightService.findFlightById(flightId)).thenReturn(flight);
 
+    // Perform the request and assert that the response JSON is correct
     mockMvc.perform(get(FlightRestController.FLIGHT_PATH_ID, flightId)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -150,10 +151,10 @@ public class FlightRestControllerTest {
 
   @Test
   void testPatchFlightById() throws Exception {
-
+    // Set up the mock data.
     Flight flight = flights.get(1);
     flight.setId(Long.valueOf(1));
-
+    // Perform the request and assert that the response JSON is correct.
     mockMvc.perform(patch(FlightRestController.FLIGHT_PATH_ID, flight.getId())
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)
@@ -166,12 +167,12 @@ public class FlightRestControllerTest {
   @Test
   void testSaveFlight() throws Exception {
 
-    // Long flightId = new Random().nextLong(300);
+    // Set up the mock data
     Flight flight = flights.get(1);
     flight.setId(Long.valueOf(2));
     BDDMockito.given(flightService.saveFlight(any(Flight.class))).willReturn(flights.get(1));
-    //.willAnswer(invocation->invocation.getArguments());
-    // System.out.println(objectMapper.writeValueAsString(flight));
+    
+    // Perform the request and assert that the response JSON is
     mockMvc.perform(post(FlightRestController.FLIGHT_PATH)
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
@@ -185,9 +186,10 @@ public class FlightRestControllerTest {
 
   @Test
   void testUpdateFlightById() throws Exception {
+    //Set up the mock data
     Flight flight = flights.get(0);
     flight.setId(Long.valueOf(1));
-
+    // Perform the request and assert that the response JSON is correct.
     mockMvc.perform(put(FlightRestController.FLIGHT_PATH_ID, flight.getId())
         .accept(MediaType.APPLICATION_JSON)
         .contentType(MediaType.APPLICATION_JSON)

@@ -108,10 +108,12 @@ public class UserRestControllerTest {
 
     @Test
     void testGetUserById() throws JsonProcessingException, Exception {
+        // Set up mock data
         Long userId = 1L;
         BDDMockito.given(userXMLService.findUserById(any(Long.class))).willReturn(user);
         Mockito.when(userXMLService.findUserById(userId)).thenReturn(user);
-    
+        
+        // Perform the request and assert that the the response XML is correct
         mockMvc.perform(get(UserRestController.USER_PATH_ID, userId)
             .accept(MediaType.APPLICATION_XML_VALUE)
             .contentType(MediaType.APPLICATION_XML_VALUE)
@@ -124,9 +126,10 @@ public class UserRestControllerTest {
 
     @Test
     void testGetUsers() throws JsonProcessingException, Exception {
+        // Set up mock data
         BDDMockito.given(userXMLService.findAllUsers()).willReturn(users);
         Mockito.when(userXMLService.findAllUsers()).thenReturn(users);
-    
+        // Perform the request and assert that the response XML is correct.
         mockMvc.perform(get(UserRestController.USER_PATH)
             .accept(MediaType.APPLICATION_XML)
             .contentType(MediaType.APPLICATION_XML)
@@ -138,13 +141,13 @@ public class UserRestControllerTest {
 
     @Test
     void testRegisterUser() throws Exception {
+        //Set up mock data
         String userEmail = "user@email.com";
         BDDMockito.given(userService.findUserByEmail(any(String.class))).willReturn(userEntity);
         Mockito.when(userService.findUserByEmail(userEmail)).thenReturn(userEntity);
 
-    
+        // Perform the request and assert that the response code is correct.
         mockMvc.perform(post(UserRestController.USER_PATH)
-            .flashAttr("userXML", user)
             .accept(MediaType.APPLICATION_XML)
             .contentType(MediaType.APPLICATION_XML)
             .content(userXML)

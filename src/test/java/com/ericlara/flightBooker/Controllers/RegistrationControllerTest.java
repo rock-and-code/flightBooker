@@ -63,6 +63,7 @@ public class RegistrationControllerTest {
 
     @BeforeEach
     void setUp() throws UserAlreadyExistsException {
+        // Set up mock data
         passwordEncoder = new BCryptPasswordEncoder();
         //Creating a role for the booking user
         Role role = new Role(TbConstants.Roles.USER);
@@ -87,6 +88,7 @@ public class RegistrationControllerTest {
     @Test
     @WithMockUser(username = "user@email.com", authorities = { "ROLE_USER" })
     void testUserRegistration() throws Exception {
+        // Set up mock data
         UserDto userDto  = new UserDto("userFirstName",
                 "userLastName",
                 "user@email.com",
@@ -97,7 +99,7 @@ public class RegistrationControllerTest {
         //To address custom authentication method in Booking controller 
         BDDMockito.given(userService.findUserByEmail(any(String.class))).willReturn(user);
         Mockito.when(userService.findUserByEmail(userName)).thenReturn(user);
-
+        // Perform the request and assert that the view name is correct.
         this.mockMvc.perform(post("/register")
                 .flashAttr("userDto", userDto)
                 .with(csrf())
