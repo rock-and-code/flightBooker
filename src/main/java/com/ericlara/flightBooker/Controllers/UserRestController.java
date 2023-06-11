@@ -7,13 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +23,6 @@ import com.ericlara.flightBooker.Services.UserService;
 import com.ericlara.flightBooker.Services.UserXMLService;
 import com.ericlara.flightBooker.util.UserXMLUtil;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 @RestController
 public class UserRestController {
 
@@ -39,15 +31,12 @@ public class UserRestController {
 
   // The URL for a specific flight endpoint
   public static final String USER_PATH_ID = USER_PATH + "/{userId}";
-
+  
   @Autowired
   private UserXMLService userXMLService;
-
+  
   @Autowired
   private UserService userService;
-
-  @Autowired
-  protected AuthenticationManager authenticationManager;
 
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -103,60 +92,6 @@ public class UserRestController {
       // (Found)
       return ResponseEntity.notFound().build();
     }
-  }
-
-  @PostMapping(value = USER_PATH + "/login", produces = MediaType.APPLICATION_XML_VALUE)
-  public ResponseEntity<UserXML> authenticateUser(@RequestBody UserXML user, HttpServletRequest request) {
-
-    // Get user
-    UserEntity userEntity = userService.findUserByEmail(user.getEmail());
-
-    if (userEntity != null) {
-
-      // authenticate user
-      authWithAuthManager(request, user.getEmail(), user.getPassword());
-
-      // Set the X-Succesful-Login header to the user email 
-      // For demostration purposes only
-      HttpHeaders headers = new HttpHeaders();
-      headers.add("X-Authenticated-User", user.getEmail());
-
-      // Return a response with HTTP status code 200 (OK)
-      return new ResponseEntity<>(headers, HttpStatus.OK);
-
-    } else {
-      // Return a response with HTTP status code 200 (OK)
-      return ResponseEntity.notFound().build();
-    }
-
-  }
-
-  /**
-   * Authenticates the user using the username and password provided.
-   * This helper function is used to auto-login the user after successful
-   * registration.
-   * 
-   * @param request  The HTTP request
-   * @param username The username
-   * @param password The password
-   */
-  private void authWithAuthManager(HttpServletRequest request, String username, String password) {
-    // Create a new UsernamePasswordAuthenticationToken object
-    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-
-    // Set the authentication details
-    authToken.setDetails(new WebAuthenticationDetails(request));
-
-    // Authenticate the user
-    Authentication authentication = authenticationManager.authenticate(authToken);
-
-    // Set the security context
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-    // Set the authentication in the session
-    request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-        SecurityContextHolder.getContext());
-
   }
 
 }

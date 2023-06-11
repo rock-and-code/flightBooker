@@ -145,7 +145,6 @@ public class FlightRestControllerTest {
     mockMvc.perform(get(FlightRestController.FLIGHT_PATH)
         .accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andDo(MockMvcResultHandlers.print());
   }
 

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.mockito.Mockito;
@@ -46,6 +47,12 @@ public class FlightControllerTest {
     // This field is injected by Spring Boot. It provides a MockMvc instance that
     // can be used to test the FlightController class.
 
+    @MockBean
+    private AuthenticationManager authenticationManager;
+    // This field is mocked by Mockito. It provides a mock implementation of the
+    // AuthenticationManager interface. This is necessary because we are testing the
+    // FlightController class without Spring Security enabled.
+
     @MockBean(name = "flightService")
     private FlightService flightService;
     // This field is mocked by Mockito. It provides a mock implementation of the
@@ -66,6 +73,7 @@ public class FlightControllerTest {
 
     @Test
     void testFlightsForm() throws Exception {
+    
 
         this.mockMvc.perform(get("/")).andExpect(view().name("flights/flightSearchForm"))
                 .andDo(MockMvcResultHandlers.print());

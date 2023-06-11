@@ -13,12 +13,14 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @JacksonXmlRootElement(localName = "user")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement
+@XmlRootElement(name = "user")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserXML  implements Serializable {
     @NotNull
     @NotEmpty(message = "User's first name cannot be empty.")
@@ -37,4 +39,16 @@ public class UserXML  implements Serializable {
     @NotEmpty(message = "User's password cannot be empty")
     //@JsonIgnore //TO NOT DISPLAY THE PASSWORD ATTRIBUTE IN THE XML
     private String password;
+
+    @Override
+    public String toString() {
+        return "<user>\n"
+                + "\t<firstName>" + firstName + "</firstName>\n"
+                + "\t<lastName>" + lastName + "</lastName>\n"
+                + "\t<email>" + email + "</email>\n"
+                + "\t<password>" + password + "</password>\n"
+                + "</user>";
+    }
+
+    
 }

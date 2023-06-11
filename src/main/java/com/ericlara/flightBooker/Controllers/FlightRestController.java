@@ -6,7 +6,7 @@ package com.ericlara.flightBooker.Controllers;
 
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ericlara.flightBooker.Models.Flight;
 import com.ericlara.flightBooker.Models.FlightNotFoundException;
-import com.ericlara.flightBooker.Services.AirportService;
 import com.ericlara.flightBooker.Services.FlightService;
 
 @RestController
@@ -37,13 +36,9 @@ public class FlightRestController {
   public static final String FLIGHT_PATH_ID = FLIGHT_PATH + "/{flightId}";
 
   // The flight service that provides access to flight data
-  private final FlightService flightService;
+  @Autowired
+  private FlightService flightService;
 
-  // Constructor that injects dependencies for FlightService and AirportService
-  public FlightRestController(@Qualifier("flightService") FlightService flightService,
-                              @Qualifier("airportService") AirportService airportService) {
-    this.flightService = flightService;
-  }
 
   // Endpoint to update a flight by ID
   @PutMapping(value = FLIGHT_PATH_ID, produces =  MediaType.APPLICATION_JSON_VALUE)
