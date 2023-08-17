@@ -56,6 +56,8 @@ public class UserBookingsController {
         // Get the user's bookings and add them to the model
         model.addAttribute("bookings", flightBookService.findAllByUser(currentUser));
 
+        model.addAttribute("title", "Bookings");
+
         // Return the view name for the user's bookings
         return "bookings/userBookings";
     }

@@ -87,6 +87,8 @@ public class FlightController {
         // Get all unread bookings details and add them to the model
         model.addAttribute("unreadBookings", unread_bookings_notification);
 
+        model.addAttribute("title", "Search Flights");
+
         // Return the "flights/flightSearchForm" view
         return "flights/flightSearchForm";
     }
@@ -122,6 +124,8 @@ public class FlightController {
 
         // Get all unread bookings details and add them to the model
         model.addAttribute("unreadBookings", unread_bookings_notification);
+
+        model.addAttribute("title", "Flights");
 
         // Return the "flights/flights" view
         return "flights/flights";
@@ -166,6 +170,7 @@ public class FlightController {
             // Add the found flight to the model
             model.addAttribute("flight", flightService.findFlightById(id));
             model.addAttribute("userEmail", getLoggInUserEmail());
+            model.addAttribute("title", "Flight Details");
             // Get all unread bookings details and add them to the model
             model.addAttribute("unreadBookings", unread_bookings_notification);
             // Saving the fligh url in case user has to be redirected after login if the

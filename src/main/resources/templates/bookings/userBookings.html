@@ -1,149 +1,81 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Header -->
+<!-- Header fragment -->
+<div th:insert="~{fragments/header :: header}"></div>
+<!-- Navbar fragment -->
+<div th:insert="~{fragments/userBookingsNavBar :: userBookingsNavBar}"></div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- bootstrap cdn -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
-        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
-        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
-        crossorigin="anonymous"></script>
-    <link rel="icon" type="image/x-icon" href="../static/images/airplane.png">
-    <title>Flights</title>
-</head>
-
-<body>
-    <!-- Nav bar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">FlightBooker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Search</a>
-                    </li>
-                </ul>
-                <!-- USER PROFILE NAVIGATION ELEMENT TO DISPLAY USER'S BOOKED FLIGHT -->
-                <!-- CHECK IF USER HAS BEEN AUTHENTICATED TO DISPLAY LOGIN OR LOGOUT BUTTON -->
-                <div class="d-flex align-items-center">
-                    <div class="flex-shrink-0 dropdown" th:if="${userEmail != null}">
-                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
-                                alt="mdo" width="32" height="32" class="rounded-circle">
-                        </a>
-                        <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
-                            <li class="dropdown-item" th:text="${userEmail}"></li>
-                            <hr class="dropdown-divider">
-                            </li>
-                            <li class="nav-item">
-                                <form th:action="@{/logout}" method="post">
-                                    <button type="submit" class="dropdown-item">Log out</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- DISPLAY LOG IN -->
-                    <div class="flex-shrink-0 dropdown" th:if="${userEmail == null}">
-                        <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://www.vhv.rs/dpng/d/509-5096621_login-register-vector-user-icon-png-transparent-png.png"
-                                alt="mdo" width="32" height="32" class="rounded-circle">
-                        </a>
-                        <ul class="dropdown-menu text-small shadow dropdown-menu-md-end">
-                            <li class="nav-item">
-                                <form th:action="@{/login}" method="get">
-                                    <button type="submit" class="dropdown-item">Log In</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- END IF -->
-                </div>
-            </div>
-    </nav>
-    <div class="container-lg">
-        <div class="container-md">
-            <h1 class="mt-4">Bookings</h1>
-            <!-- CARDS WITH BOOKINGS INFO -->
-            <!-- CONDITIONAL TO CHECK IF SEARCH QUERY RENDERED RESULTS IF SO DISPLAY MATCHING RESULTS -->
-            <div class="container" th:if="${bookings.size()>0}">
-                <div class="container" th:each="booking : ${bookings}">
-                    <div class="card my-3 shadow">
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="card-body">
-                                    <div class="d-md-flex justify-content-between">
-                                        <h5 class="card-title" th:text="|Confirmation No: ${booking.bookingNumber}|">
-                                        </h5>
-                                        <h5 class="card-title" th:text="|Booking Date: ${booking.bookedDate}|"></h5>
-                                    </div>
-                                    <div class="d-md-flex justify-content-between">
-                                        <p class="card-text"><small class="text-muted"
-                                                th:text="|Flight Number: |"></small><span class="text-dark-emphasis"
-                                                th:text="${booking.flight.flightNumber}"></span></p>
-                                        <p class="card-text"><small class="text-muted"
-                                                th:text="|Departure Time: |"></small><span class="text-dark-emphasis"
-                                                th:text="${booking.flight.formattedDepartureTime}"></span></p>
-                                        <p class="card-text "><small class="text-muted"
-                                                th:text="|Departure date: |"></small><span class="text-dark-emphasis"
-                                                th:text="${booking.flight.departureDate}"></span></p>
-                                    </div>
-                                    <div class="d-md-flex justify-content-between">
-                                        <p class="card-text "><small class="text-muted" th:text="|From: |"></small><span
-                                                class="text-dark-emphasis" th:text="${booking.flight.origin}"></span>
-                                        </p>
-                                        <p class="card-text "><small class="text-muted" th:text="|To: |"></small><span
-                                                class="text-dark-emphasis"
-                                                th:text="${booking.flight.destination}"></span></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card-body">
-                                    <form th:action="@{/bookings/user/{id}(id=${booking.id})}" method="POST">
-                                        <button type="submit" class="btn btn-dark col-12">Cancel</button>
-                                    </form>
-                                    <a class="btn btn-outline-secondary col-12 my-3"   
-                                        th:href="@{/flights/{id}(id=${booking.flight.id})}">Flight Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- ELSE: BOOKINGG LIST EMPTY MESSAGES -->
-            <div class="container" th:unless="${bookings.size()>0}">
-                <div class="card my-3 shadow bg-white">
-                    <div class="row border-danger">
+<div class="container-lg">
+    <div class="container-md">
+        <h1 class="mt-4">Bookings</h1>
+        <!-- CARDS WITH BOOKINGS INFO -->
+        <!-- CONDITIONAL TO CHECK IF SEARCH QUERY RENDERED RESULTS IF SO DISPLAY MATCHING RESULTS -->
+        <div class="container" th:if="${bookings.size()>0}">
+            <div class="container" th:each="booking : ${bookings}">
+                <div class="card my-3 shadow">
+                    <div class="row">
                         <div class="col-md-9">
                             <div class="card-body">
                                 <div class="d-md-flex justify-content-between">
-                                    <h5 class="card-title" th:text="|Your bookings list is empty.|">
+                                    <h5 class="card-title" th:text="|Confirmation No: ${booking.bookingNumber}|">
                                     </h5>
+                                    <h5 class="card-title" th:text="|Booking Date: ${booking.bookedDate}|"></h5>
+                                </div>
+                                <div class="d-md-flex justify-content-between">
+                                    <p class="card-text"><small class="text-muted"
+                                            th:text="|Flight Number: |"></small><span class="text-dark-emphasis"
+                                            th:text="${booking.flight.flightNumber}"></span></p>
+                                    <p class="card-text"><small class="text-muted"
+                                            th:text="|Departure Time: |"></small><span class="text-dark-emphasis"
+                                            th:text="${booking.flight.formattedDepartureTime}"></span></p>
+                                    <p class="card-text "><small class="text-muted"
+                                            th:text="|Departure date: |"></small><span class="text-dark-emphasis"
+                                            th:text="${booking.flight.departureDate}"></span></p>
+                                </div>
+                                <div class="d-md-flex justify-content-between">
+                                    <p class="card-text "><small class="text-muted" th:text="|From: |"></small><span
+                                            class="text-dark-emphasis" th:text="${booking.flight.origin}"></span>
+                                    </p>
+                                    <p class="card-text "><small class="text-muted" th:text="|To: |"></small><span
+                                            class="text-dark-emphasis" th:text="${booking.flight.destination}"></span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="card-body">
-                                <a class="btn btn-dark text-white col-12" th:href="@{/}">Search Flights</a>
+                                <form th:action="@{/bookings/user/{id}(id=${booking.id})}" method="POST">
+                                    <button type="submit" class="btn btn-dark col-12">Cancel</button>
+                                </form>
+                                <a class="btn btn-outline-secondary col-12 my-3"
+                                    th:href="@{/flights/{id}(id=${booking.flight.id})}">Flight Details</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- ELSE: BOOKINGG LIST EMPTY MESSAGES -->
+        <div class="container" th:unless="${bookings.size()>0}">
+            <div class="card my-3 shadow bg-white">
+                <div class="row border-danger">
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <div class="d-md-flex justify-content-between">
+                                <h5 class="card-title" th:text="|Your bookings list is empty.|">
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card-body">
+                            <a class="btn btn-dark text-white col-12" th:href="@{/}">Search Flights</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
+</div>
 
-</html>
+<!-- Footer fragment -->
+<div th:insert="~{fragments/footer :: footer}"></div>

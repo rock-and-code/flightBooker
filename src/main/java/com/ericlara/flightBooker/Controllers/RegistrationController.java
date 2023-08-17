@@ -37,6 +37,8 @@ public class RegistrationController {
         // Add a new UserDto object to the model
         model.addAttribute("userDto", new UserDto());
 
+        model.addAttribute("title", "Register");
+
         // Return the view name for the registration form
         return "authentication/register";
     }

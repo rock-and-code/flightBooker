@@ -60,6 +60,8 @@ public class BookingsController {
         }
         model.addAttribute("userEmail", currentUser.getEmail());
 
+        model.addAttribute("title", "Book Flight");
+
         // Get the flight from the database and add it to the model
         try {
             Flight flight = flightService.findFlightById(id);
@@ -75,6 +77,8 @@ public class BookingsController {
 
         // Create a new BookingDto object and add it to the model
         model.addAttribute("bookingDTO", new BookingDto());
+
+        model.addAttribute("title", "Checkout");
 
         // Get all unread bookings details and add them to the model
         model.addAttribute("unreadBookings", unread_bookings_notification);
