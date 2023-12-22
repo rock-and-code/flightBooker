@@ -1,6 +1,7 @@
 package com.ericlara.flightBooker.bootstrap;
 
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class BootstrapData implements CommandLineRunner {
         //GENERATES RANDOM DUMMY DATA FOR ILLUSTRATION PURPOSES. DATA IS CREATED ON A MEMORY DBA
         int RANDOM_AIRPORTS_SAMPLE =  80;
         int RANDOM_FLIGHTS_SAMPLE = 3000000;
-        Random random = new Random();
+        Random random = new SecureRandom();
         List<Airport> airports = new ArrayList<>();
         
 
