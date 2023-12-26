@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +59,7 @@ public class UserXMLUtil {
 
             JAXBContext context;
             BufferedWriter writer = null;
-            writer = new BufferedWriter(new FileWriter(new File(System.getProperty("java.io.tmpdir") + "users.xml")));
+            writer = Files.newBufferedWriter(new File(System.getProperty("java.io.tmpdir") + "users.xml").toPath());
             context = JAXBContext.newInstance(UsersXML.class);
             Marshaller m = context.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
